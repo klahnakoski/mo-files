@@ -1,2 +1,2 @@
-pyDots
-mo-math
+mo-dots
+mo-logs
