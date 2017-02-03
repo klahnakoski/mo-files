@@ -1,0 +1,12 @@
+.idea
+.svn
+*.iml
+*.pyc
+util/.svn
+build
+dist
+*.egg-info
+*.txt
+*.json
+*.tab
+
