@@ -9,16 +9,17 @@
 #
 import base64
 import io
-import os
+import re
 import shutil
 from datetime import datetime
-
-import re
+from mimetypes import MimeTypes
 from tempfile import mkdtemp
 
+import os
 from mo_dots import get_module, coalesce
 from mo_logs import Log, Except
 
+mime = MimeTypes()
 
 class File(object):
     """
@@ -31,10 +32,11 @@ class File(object):
         else:
             return object.__new__(cls)
 
-    def __init__(self, filename, buffering=2 ** 14, suffix=None):
+    def __init__(self, filename, buffering=2 ** 14, suffix=None, mime_type=None):
         """
         YOU MAY SET filename TO {"path":p, "key":k} FOR CRYPTO FILES
         """
+        self._mime_type = mime_type
         if filename == None:
             Log.error(u"File must be given a filename")
         elif isinstance(filename, File):
@@ -66,17 +68,7 @@ class File(object):
 
     @classmethod
     def new_instance(cls, *path):
-        def scrub(i, p):
-            if isinstance(p, File):
-                p = p.abspath
-            p = p.replace(os.sep, b"/")
-            if p[-1] == '/':
-                p = p[:-1]
-            if i > 0 and p[0] == '/':
-                p = p[1:]
-            return p
-
-        return File('/'.join(scrub(i, p) for i, p in enumerate(path)))
+        return File(join_path(*path))
 
     @property
     def timestamp(self):
@@ -130,6 +122,17 @@ class File(object):
             return parts[0]
         else:
             return b".".join(parts[0:-1])
+
+    @property
+    def mime_type(self):
+        if not self._mime_type:
+            if self.abspath.endswith(".json"):
+                self._mime_type = "application/json"
+            else:
+                self._mime_type, _ = mime.guess_type(self.abspath)
+                if not self._mime_type:
+                    self._mime_type = "application/binary"
+        return self._mime_type
 
     def find(self, pattern):
         """
@@ -328,6 +331,16 @@ class File(object):
         return [File(self._filename + b"/" + c) for c in os.listdir(self.filename)]
 
     @property
+    def leaves(self):
+        for c in os.listdir(self.abspath):
+            child = File(self._filename + b"/" + c)
+            if child.is_directory():
+                for l in child.leaves:
+                    yield l
+            else:
+                yield child
+
+    @property
     def parent(self):
         if not self._filename:
             return File(b"..")
@@ -401,3 +414,23 @@ def datetime2string(value, format="%Y-%m-%d %H:%M:%S"):
         return value.strftime(format)
     except Exception as e:
         Log.error(u"Can not format {{value}} with {{format}}", value=value, format=format, cause=e)
+
+
+def join_path(*path):
+    def scrub(i, p):
+        if isinstance(p, File):
+            p = p.abspath
+        if p == b"/":
+            return b"."
+        p = p.replace(os.sep, b"/")
+        if p[-1] == b'/':
+            p = p[:-1]
+        if i > 0 and p[0] == b'/':
+            p = p[1:]
+        return p
+
+    joined = b'/'.join(scrub(i, p) for i, p in enumerate(path))
+    if ".." in joined:
+        Log.error("not implemented yet")
+    return joined.replace(b"/./", b"/").lstrip(b"./").rstrip(b"/.")
+
