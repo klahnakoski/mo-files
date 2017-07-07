@@ -48,3 +48,6 @@ class TestNames(FuzzyTestCase):
         self.assertEqual(f.parent.parent.filename, "")
         self.assertEqual(f.parent.parent.parent.filename, "..")
 
+    def test_grandparent(self):
+        f = File.new_instance("tests/temp", "../..")
+        self.assertEqual(f.filename, ".")

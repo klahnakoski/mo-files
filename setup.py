@@ -44,7 +44,7 @@ def find_packages(where='.', lib_prefix='', exclude=()):
 
 setup(
     name='mo-files',
-    version="1.0.17187",
+    version="1.2.17188",
     description='More Files! Steamlined for UTF8 and JSON.',
     long_description=long_desc,
     author='Kyle Lahnakoski',
