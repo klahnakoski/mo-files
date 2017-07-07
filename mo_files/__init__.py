@@ -429,8 +429,23 @@ def join_path(*path):
             p = p[1:]
         return p
 
-    joined = b'/'.join(scrub(i, p) for i, p in enumerate(path))
-    if ".." in joined:
-        Log.error("not implemented yet")
-    return joined.replace(b"/./", b"/").lstrip(b"./").rstrip(b"/.")
+    scrubbed = []
+    for i, p in enumerate(path):
+        scrubbed.extend(scrub(i, p).split(b"/"))
+    simpler = []
+    for s in scrubbed:
+        if s == ".":
+            pass
+        elif s == "..":
+            if simpler:
+                simpler.pop()
+            else:
+                simpler.append(s)
+        else:
+            simpler.append(s)
+    if not simpler:
+        joined = "."
+    else:
+        joined = b'/'.join(simpler)
+    return joined
 
