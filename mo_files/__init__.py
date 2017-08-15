@@ -13,9 +13,10 @@ import re
 import shutil
 from datetime import datetime
 from mimetypes import MimeTypes
-from tempfile import mkdtemp
+from tempfile import mkdtemp, NamedTemporaryFile
 
 import os
+from future.utils import text_type, binary_type
 from mo_dots import get_module, coalesce
 from mo_logs import Log, Except
 
@@ -41,7 +42,7 @@ class File(object):
             Log.error(u"File must be given a filename")
         elif isinstance(filename, File):
             return
-        elif isinstance(filename, basestring):
+        elif isinstance(filename, (binary_type, text_type)):
             self.key = None
             if filename==b".":
                 self._filename = b""
@@ -140,6 +141,7 @@ class File(object):
         :return: LIST OF File OBJECTS THAT HAVE MATCHING NAME
         """
         output = []
+
         def _find(dir):
             if re.match(pattern, dir._filename.split(b"/")[-1]):
                 output.append(dir)
@@ -230,13 +232,13 @@ class File(object):
 
             if isinstance(data, list):
                 pass
-            elif isinstance(data, basestring):
+            elif isinstance(data, (binary_type, text_type)):
                 data=[data]
             elif hasattr(data, b"__iter__"):
                 pass
 
             for d in data:
-                if not isinstance(d, unicode):
+                if not isinstance(d, text_type):
                     Log.error(u"Expecting unicode data only")
                 if self.key:
                     f.write(get_module(u"crypto").encrypt(d, self.key).encode(b"utf8"))
@@ -342,7 +344,7 @@ class File(object):
 
     @property
     def parent(self):
-        if not self._filename:
+        if not self._filename or self._filename==".":
             return File(b"..")
         elif self._filename.endswith(b".."):
             return File(self._filename+b"/..")
@@ -386,6 +388,21 @@ class TempDirectory(File):
 
     def __init__(self):
         File.__init__(self, mkdtemp())
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.delete()
+
+class TempFile(File):
+    def __new__(cls, *args, **kwargs):
+        return object.__new__(cls)
+
+    def __init__(self):
+        self.temp = NamedTemporaryFile(delete=False)
+        self.temp.close()
+        File.__init__(self, self.temp.name)
 
     def __enter__(self):
         return self
