@@ -15,7 +15,7 @@ from __future__ import unicode_literals
 
 import os
 
-from mo_files import File
+from mo_files import File, join_path
 from mo_testing.fuzzytestcase import FuzzyTestCase
 
 
@@ -51,3 +51,6 @@ class TestNames(FuzzyTestCase):
     def test_grandparent(self):
         f = File.new_instance("tests/temp", "../..")
         self.assertEqual(f.filename, ".")
+
+    def test_empty(self):
+        self.assertEqual(join_path("test", ""), "test")

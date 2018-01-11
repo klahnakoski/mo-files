@@ -447,9 +447,9 @@ def join_path(*path):
     def scrub(i, p):
         if isinstance(p, File):
             p = p.abspath
-        if p == "/":
-            return "."
         p = p.replace(os.sep, "/")
+        if p == "":
+            return "."
         if p[-1] == b'/':
             p = p[:-1]
         if i > 0 and p[0] == b'/':
