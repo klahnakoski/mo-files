@@ -465,7 +465,10 @@ def join_path(*path):
             pass
         elif s == "..":
             if simpler:
-                simpler.pop()
+                if simpler[-1] == '..':
+                    simpler.append(s)
+                else:
+                    simpler.pop()
             else:
                 simpler.append(s)
         else:

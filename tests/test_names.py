@@ -53,4 +53,9 @@ class TestNames(FuzzyTestCase):
         self.assertEqual(f.filename, ".")
 
     def test_empty(self):
-        self.assertEqual(join_path("test", ""), "test")
+        test = join_path("test", "")
+        self.assertEqual(test, "test")
+
+    def test_parents(self):
+        test = join_path("test", "../../..")
+        self.assertEqual(test, "../..")
