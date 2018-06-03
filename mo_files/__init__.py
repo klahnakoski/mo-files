@@ -17,8 +17,10 @@ from tempfile import mkdtemp, NamedTemporaryFile
 
 import os
 from mo_future import text_type, binary_type
-from mo_dots import get_module, coalesce
+from mo_dots import get_module, coalesce, Null
 from mo_logs import Log, Except
+from mo_logs.exceptions import extract_stack
+from mo_threads import Thread, Till
 
 mime = MimeTypes()
 
@@ -28,7 +30,9 @@ class File(object):
     """
 
     def __new__(cls, filename, buffering=2 ** 14, suffix=None):
-        if isinstance(filename, File):
+        if filename == None:
+            return Null
+        elif isinstance(filename, File):
             return filename
         else:
             return object.__new__(cls)
@@ -198,11 +202,15 @@ class File(object):
         return File.add_suffix(self._filename, suffix)
 
     def read(self, encoding="utf8"):
+        """
+        :param encoding:
+        :return:
+        """
         with open(self._filename, "rb") as f:
-            content = f.read().decode(encoding)
             if self.key:
-                return get_module(u"mo_math.crypto").decrypt(content, self.key)
+                return get_module("mo_math.crypto").decrypt(f.read(), self.key)
             else:
+                content = f.read().decode(encoding)
                 return content
 
     def read_lines(self, encoding="utf8"):
@@ -226,7 +234,10 @@ class File(object):
             if not self.parent.exists:
                 self.parent.create()
             with open(self._filename, "rb") as f:
-                return f.read()
+                if self.key:
+                    return get_module("mo_math.crypto").decrypt(f.read(), self.key)
+                else:
+                    return f.read()
         except Exception as e:
             Log.error(u"Problem reading file {{filename}}", filename=self.abspath, cause=e)
 
@@ -234,7 +245,10 @@ class File(object):
         if not self.parent.exists:
             self.parent.create()
         with open(self._filename, "wb") as f:
-            f.write(content)
+            if self.key:
+                f.write(get_module("mo_math.crypto").encrypt(content, self.key))
+            else:
+                f.write(content)
 
     def write(self, data):
         if not self.parent.exists:
@@ -254,7 +268,8 @@ class File(object):
                 if not isinstance(d, text_type):
                     Log.error(u"Expecting unicode data only")
                 if self.key:
-                    f.write(get_module(u"crypto").encrypt(d, self.key).encode("utf8"))
+                    from mo_math.crypto import encrypt
+                    f.write(encrypt(d, self.key).encode("utf8"))
                 else:
                     f.write(d.encode("utf8"))
 
@@ -277,16 +292,16 @@ class File(object):
 
         return output()
 
-    def append(self, content):
+    def append(self, content, encoding='utf8'):
         """
         add a line to file
         """
         if not self.parent.exists:
             self.parent.create()
         with open(self._filename, "ab") as output_file:
-            if isinstance(content, str):
+            if not isinstance(content, text_type):
                 Log.error(u"expecting to write unicode only")
-            output_file.write(content.encode("utf8"))
+            output_file.write(content.encode(encoding))
             output_file.write(b"\n")
 
     def __len__(self):
@@ -396,6 +411,10 @@ class File(object):
 
 
 class TempDirectory(File):
+    """
+    A CONTEXT MANAGER FOR AN ALLOCATED, BUT UNOPENED TEMPORARY DIRECTORY
+    WILL BE DELETED WHEN EXITED
+    """
     def __new__(cls):
         return File.__new__(cls, None)
 
@@ -406,10 +425,14 @@ class TempDirectory(File):
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.delete()
+        Thread.run("delete dir " + self.name, delete_daemon, file=self, caller_stack=extract_stack(1))
 
 
 class TempFile(File):
+    """
+    A CONTEXT MANAGER FOR AN ALLOCATED, BUT UNOPENED TEMPORARY FILE
+    WILL BE DELETED WHEN EXITED
+    """
     def __new__(cls, *args, **kwargs):
         return object.__new__(cls)
 
@@ -422,7 +445,7 @@ class TempFile(File):
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.delete()
+        Thread.run("delete file " + self.name, delete_daemon, file=self, caller_stack=extract_stack(1))
 
 
 def _copy(from_, to_):
@@ -451,7 +474,7 @@ def datetime2string(value, format="%Y-%m-%d %H:%M:%S"):
 def join_path(*path):
     def scrub(i, p):
         p = p.replace(os.sep, "/")
-        if p == "":
+        if p in ('', '/'):
             return "."
         if p[-1] == '/':
             p = p[:-1]
@@ -499,3 +522,17 @@ def join_path(*path):
         joined = abs_prefix + ('/'.join(simpler))
 
     return joined
+
+
+def delete_daemon(file, caller_stack, please_stop):
+    # WINDOWS WILL HANG ONTO A FILE FOR A BIT AFTER WE CLOSED IT
+    while not please_stop:
+        try:
+            file.delete()
+            return
+        except Exception as e:
+            e = Except.wrap(e)
+            e.trace = e.trace[0:2]+caller_stack
+
+            Log.warning(u"problem deleting file {{file}}", file=file.abspath, cause=e)
+            (Till(seconds=10)|please_stop).wait()
