@@ -44,7 +44,7 @@ def find_packages(where='.', lib_prefix='', exclude=()):
 
 setup(
     name='mo-files',
-    version="2.17.18199",
+    version="2.18.18240",
     description='More Files! Steamlined for UTF8 and JSON.',
     long_description=long_desc,
     author='Kyle Lahnakoski',
@@ -52,7 +52,7 @@ setup(
     url='https://github.com/klahnakoski/mo-files',
     license='MPL 2.0',
     packages=find_packages(".", lib_prefix=""),
-    install_requires=["mo-dots","mo-future","mo-logs"],
+    install_requires=["mo-dots>=2.18.18240","mo-future>=2.18.18240","mo-logs>=2.18.18240"],
     include_package_data=True,
     zip_safe=False,
     classifiers=[  #https://pypi.python.org/pypi?%3Aaction=list_classifiers
