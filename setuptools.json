@@ -1,17 +1,21 @@
 {
-    "name": "mo-files",
-    "version": "2.18.18240",
-    "description": "More Files! Steamlined for UTF8 and JSON.",
     "author": "Kyle Lahnakoski",
     "author_email": "kyle@lahnakoski.com",
-    "url": "https://github.com/klahnakoski/mo-files",
-    "license": "MPL 2.0",
-    "include_package_data": true,
-    "zip_safe": false,
     "classifiers": [
         "Development Status :: 4 - Beta",
         "Topic :: Software Development :: Libraries",
         "Topic :: Software Development :: Libraries :: Python Modules",
         "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)"
-    ]
+    ],
+    "description": "More Files! Steamlined for UTF8 and JSON.",
+    "include_package_data": true,
+    "install_requires": ["mo-dots", "mo-future", "mo-logs"],
+    "license": "MPL 2.0",
+    "long_description": "More Files!\n==========\n\nThe `File` class makes the default assumption all files have cr-delimited unicode content that is UTF-8 encoded. This is great for JSON files. It also provides better OO over some common file manipulations.\n\n",
+    "long_description_content_type": "text/markdown",
+    "name": "mo-files",
+    "packages": ["mo_files", "tests"],
+    "url": "https://github.com/klahnakoski/mo-files",
+    "version": "2.19.18252",
+    "zip_safe": false
 }
