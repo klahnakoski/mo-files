@@ -6,7 +6,5 @@ util/.svn
 build
 dist
 *.egg-info
-*.txt
-*.json
 *.tab
 
