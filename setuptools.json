@@ -9,13 +9,23 @@
     ],
     "description": "More Files! Steamlined for UTF8 and JSON.",
     "include_package_data": true,
-    "install_requires": ["mo-dots==2.31.19025", "mo-future==2.24.19023", "mo-logs==2.31.19025"],
+    "install_requires": ["mo-dots>=3.2.19316", "mo-future>=3.1.19316", "mo-logs>=3.2.19316"],
     "license": "MPL 2.0",
-    "long_description": "More Files!\n==========\n\nThe `File` class makes the default assumption all files have cr-delimited unicode content that is UTF-8 encoded. This is great for JSON files. It also provides better OO over some common file manipulations.\n\n",
+    "long_description": {
+        "$concat": [
+            "More Files!",
+            "==========",
+            "",
+            "The `File` class makes the default assumption all files have cr-delimited unicode content that is UTF-8 encoded. This is great for JSON files. It also provides better OO over some common file manipulations.",
+            "",
+            ""
+        ],
+        "separator": "\n"
+    },
     "long_description_content_type": "text/markdown",
     "name": "mo-files",
     "packages": ["mo_files"],
     "url": "https://github.com/klahnakoski/mo-files",
-    "version": "2.31.19025",
+    "version": "3.4.19316",
     "zip_safe": false
 }
