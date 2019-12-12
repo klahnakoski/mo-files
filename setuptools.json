@@ -29,6 +29,6 @@
     "packages": ["mo_files"],
     "python_requires": "==2.7, >=3.6",
     "url": "https://github.com/klahnakoski/mo-files",
-    "version": "3.25.19346",
+    "version": "3.26.19346",
     "zip_safe": false
 }
