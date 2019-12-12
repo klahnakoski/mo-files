@@ -2,6 +2,8 @@
     "author": "Kyle Lahnakoski",
     "author_email": "kyle@lahnakoski.com",
     "classifiers": [
+        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3.7",
         "Development Status :: 4 - Beta",
         "Topic :: Software Development :: Libraries",
         "Topic :: Software Development :: Libraries :: Python Modules",
@@ -25,7 +27,8 @@
     "long_description_content_type": "text/markdown",
     "name": "mo-files",
     "packages": ["mo_files"],
+    "python_requires": ["2.7", ">=3.6"],
     "url": "https://github.com/klahnakoski/mo-files",
-    "version": "3.23.19346",
+    "version": "3.24.19346",
     "zip_safe": false
 }
