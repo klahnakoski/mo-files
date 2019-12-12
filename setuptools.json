@@ -12,7 +12,6 @@
     "description": "More Files! Steamlined for UTF8 and JSON.",
     "include_package_data": true,
     "install_requires": ["mo-dots>=3.22.19344", "mo-future>=3.17.19324", "mo-logs>=3.21.19344"],
-    "python_requires": ["2.7", ">=3.6"],
     "license": "MPL 2.0",
     "long_description": {
         "$concat": [
@@ -28,7 +27,8 @@
     "long_description_content_type": "text/markdown",
     "name": "mo-files",
     "packages": ["mo_files"],
+    "python_requires": ["2.7", ">=3.6"],
     "url": "https://github.com/klahnakoski/mo-files",
-    "version": "3.23.19346",
+    "version": "3.24.19346",
     "zip_safe": false
 }
