@@ -27,8 +27,8 @@
     "long_description_content_type": "text/markdown",
     "name": "mo-files",
     "packages": ["mo_files"],
-    "python_requires": ["2.7", ">=3.6"],
+    "python_requires": "2.7, >=3.6",
     "url": "https://github.com/klahnakoski/mo-files",
-    "version": "3.24.19346",
+    "version": "3.25.19346",
     "zip_safe": false
 }
