@@ -7,6 +7,8 @@
 #
 # Contact: Kyle Lahnakoski (kyle@lahnakoski.com)
 #
+from __future__ import absolute_import, division, unicode_literals
+
 import base64
 import io
 import os
@@ -44,8 +46,10 @@ class File(object):
         :param key: BASE64 AES KEY USED ON ENCRYPTED FILES
         :param mime_type: IN THE UNLIKELY CASE YOU WISH TO DICTATE THE mimetype
         """
-        if not isinstance(filename, text):
-            Log.error('Expecting string, not {{type}}', type=type(filename).__name__)
+        if isinstance(filename, File):
+            return
+        elif not isinstance(filename, (str, text)):
+            Log.error('Expecting str, not {{type}}', type=type(filename).__name__)
 
         self.key = base642bytearray(key)
         self._mime_type = mime_type
@@ -399,6 +403,12 @@ class File(object):
             return os.path.exists(self._filename)
         except Exception as e:
             return False
+
+    @property
+    def length(self):
+        return os.path.getsize(self._filename)
+
+    size = length
 
     def __bool__(self):
         return self.__nonzero__()
