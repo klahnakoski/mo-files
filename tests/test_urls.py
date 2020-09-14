@@ -61,6 +61,8 @@ class TestURLs(FuzzyTestCase):
             # [{"a": [1, None, ""]}, "a=1"],
             [{"a": " "}, "a=+"],
             [{"a": "  "}, "a=++"],
+            [{"a": [1, "alpha"]}, "a=1,alpha"],
+            [{"a": {"b": [1, "alpha"]}}, "a.b=1,alpha"]
         ]
 
         for q, e in to_query:
