@@ -303,6 +303,36 @@ def url_param2value(param):
     return query
 
 
+def from_paths(value):
+    """
+    CONVERT FROM SQUARE BRACKET LEAF FORM TO Data
+    EXAMPLE: columns[1][name]
+    :param value:
+    :return:
+    """
+    output = Data()
+    for k, v in value.items():
+        path = k.split("[")
+        if any(not p.endswith("]") for p in path[1:]):
+            Log.error("expecting square brackets to be paired")
+        path = [int(pp) if is_integer(pp) else pp for i, p in enumerate(path) for pp in [p.rstrip("]") if i > 0 else p]]
+
+        d = output
+        for p, q in zip(path, path[1:]):
+            if not is_text(q):
+                if is_null(d[p]):
+                    d[p] = []
+                elif not is_list(d[p]):
+                    Log.error("can not index list with {{key}}", key=k)
+            else:
+                if is_null(d[p]):
+                    d[p] = {}
+            d = d[p]
+        d[path[-1]] = v
+
+    return output
+
+
 def value2url_param(value):
     """
     :param value:
@@ -339,3 +369,14 @@ def value2url_param(value):
     else:
         output = _encode(value2json(value))
     return output
+
+def is_integer(s):
+    if s is True or s is False:
+        return False
+
+    try:
+        if float(s) == round(float(s), 0):
+            return True
+        return False
+    except Exception:
+        return False
