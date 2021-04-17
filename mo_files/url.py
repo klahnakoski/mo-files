@@ -7,7 +7,7 @@
 # Contact: Kyle Lahnakoski (kyle@lahnakoski.com)
 #
 
-from mo_dots import Data, Null, coalesce, is_data, is_list, to_data, is_many, unwraplist
+from mo_dots import Data, Null, coalesce, is_data, is_list, to_data, is_many, unwraplist, is_null
 from mo_future import PY2, is_text, text, unichr, urlparse, is_binary
 from mo_logs import Log
 
@@ -293,7 +293,7 @@ def url_param2value(param):
             v = _decode(v)
 
         u = query.get(k)
-        if u is None:
+        if is_null(u):
             query[k] = v
         elif is_list(u):
             u += [v]

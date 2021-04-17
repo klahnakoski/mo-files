@@ -40,7 +40,7 @@ class File(object):
         else:
             return object.__new__(cls)
 
-    def __init__(self, filename, key=None, mime_type=None):
+    def __init__(self, filename, key=None, suffix=None, mime_type=None):
         """
         :param filename: STRING
         :param key: BASE64 AES KEY USED ON ENCRYPTED FILES
