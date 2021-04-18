@@ -81,10 +81,8 @@ class URL(object):
         return False
 
     def __truediv__(self, other):
-        if not is_text(other):
-            Log.error(u"Expecting text path")
         output = self.__copy__()
-        output.path = output.path.rstrip("/") + "/" + other.lstrip("/")
+        output.path = output.path.rstrip("/") + "/" + text(other).lstrip("/")
         return output
 
     def __add__(self, other):
@@ -319,14 +317,14 @@ def from_paths(value):
 
         d = output
         for p, q in zip(path, path[1:]):
-            if not is_text(q):
-                if is_null(d[p]):
-                    d[p] = []
-                elif not is_list(d[p]):
-                    Log.error("can not index list with {{key}}", key=k)
-            else:
-                if is_null(d[p]):
+            if is_null(d[p]):
+                if is_text(q):
                     d[p] = {}
+                else:
+                    d[p] = []
+            elif is_text(q) == is_list(d[p]):
+                Log.error("can not index {{type}} with {{key}}", type=type(d[p]).__name__, key=q)
+
             d = d[p]
         d[path[-1]] = v
 
