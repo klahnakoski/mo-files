@@ -14,8 +14,10 @@ from __future__ import division
 from __future__ import unicode_literals
 
 from mo_dots import Null
+from mo_json import true, false
+from mo_logs import Log
 
-from mo_files.url import url_param2value, value2url_param, URL
+from mo_files.url import url_param2value, value2url_param, URL, from_paths
 from mo_testing.fuzzytestcase import FuzzyTestCase
 
 
@@ -62,7 +64,7 @@ class TestURLs(FuzzyTestCase):
             [{"a": " "}, "a=+"],
             [{"a": "  "}, "a=++"],
             [{"a": [1, "alpha"]}, "a=1,alpha"],
-            [{"a": {"b": [1, "alpha"]}}, "a.b=1,alpha"]
+            [{"a": {"b": [1, "alpha"]}}, "a.b=1,alpha"],
         ]
 
         for q, e in to_query:
@@ -99,5 +101,61 @@ class TestURLs(FuzzyTestCase):
             self.assertEqual(url_param2value(s), e)
 
     def test_no_value_is_truthy(self):
-        self.assertTrue(url_param2value("a")['a'])
-        self.assertTrue(URL("/jobs?").query!=None)
+        self.assertTrue(url_param2value("a")["a"])
+        self.assertTrue(URL("/jobs?").query != None)
+
+    def test_decode_complex(self):
+        content = "draw=1&columns%5B0%5D%5Bdata%5D=0&columns%5B0%5D%5Bname%5D=&columns%5B0%5D%5Bsearchable%5D=true&columns%5B0%5D%5Borderable%5D=true&columns%5B0%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B0%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B1%5D%5Bdata%5D=1&columns%5B1%5D%5Bname%5D=&columns%5B1%5D%5Bsearchable%5D=true&columns%5B1%5D%5Borderable%5D=true&columns%5B1%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B1%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B2%5D%5Bdata%5D=2&columns%5B2%5D%5Bname%5D=&columns%5B2%5D%5Bsearchable%5D=true&columns%5B2%5D%5Borderable%5D=true&columns%5B2%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B2%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B3%5D%5Bdata%5D=3&columns%5B3%5D%5Bname%5D=&columns%5B3%5D%5Bsearchable%5D=true&columns%5B3%5D%5Borderable%5D=true&columns%5B3%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B3%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B4%5D%5Bdata%5D=4&columns%5B4%5D%5Bname%5D=&columns%5B4%5D%5Bsearchable%5D=true&columns%5B4%5D%5Borderable%5D=true&columns%5B4%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B4%5D%5Bsearch%5D%5Bregex%5D=false&start=0&length=25&search%5Bvalue%5D=&search%5Bregex%5D=false&search%5BcaseInsensitive%5D=true&search%5Bsmart%5D=true&escape=true"
+        value = url_param2value(content)
+        struct = from_paths(value)
+        Log.note("{{data|json}}", data=struct)
+        expected = {
+            "columns": [
+                {
+                    "data": 0,
+                    "name": "",
+                    "orderable": true,
+                    "search": {"regex": false, "value": ""},
+                    "searchable": true,
+                },
+                {
+                    "data": 1,
+                    "name": "",
+                    "orderable": true,
+                    "search": {"regex": false, "value": ""},
+                    "searchable": true,
+                },
+                {
+                    "data": 2,
+                    "name": "",
+                    "orderable": true,
+                    "search": {"regex": false, "value": ""},
+                    "searchable": true,
+                },
+                {
+                    "data": 3,
+                    "name": "",
+                    "orderable": true,
+                    "search": {"regex": false, "value": ""},
+                    "searchable": true,
+                },
+                {
+                    "data": 4,
+                    "name": "",
+                    "orderable": true,
+                    "search": {"regex": false, "value": ""},
+                    "searchable": true,
+                },
+            ],
+            "draw": 1,
+            "escape": true,
+            "length": 25,
+            "search": {
+                "caseInsensitive": true,
+                "regex": false,
+                "smart": true,
+                "value": "",
+            },
+            "start": 0,
+        }
+        self.assertAlmostEqual(struct, expected)

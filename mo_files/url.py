@@ -7,7 +7,7 @@
 # Contact: Kyle Lahnakoski (kyle@lahnakoski.com)
 #
 
-from mo_dots import Data, Null, coalesce, is_data, is_list, to_data, is_many, unwraplist
+from mo_dots import Data, Null, coalesce, is_data, is_list, to_data, is_many, unwraplist, is_null
 from mo_future import PY2, is_text, text, unichr, urlparse, is_binary
 from mo_logs import Log
 
@@ -81,10 +81,8 @@ class URL(object):
         return False
 
     def __truediv__(self, other):
-        if not is_text(other):
-            Log.error(u"Expecting text path")
         output = self.__copy__()
-        output.path = output.path.rstrip("/") + "/" + other.lstrip("/")
+        output.path = output.path.rstrip("/") + "/" + text(other).lstrip("/")
         return output
 
     def __add__(self, other):
@@ -293,7 +291,7 @@ def url_param2value(param):
             v = _decode(v)
 
         u = query.get(k)
-        if u is None:
+        if is_null(u):
             query[k] = v
         elif is_list(u):
             u += [v]
@@ -301,6 +299,36 @@ def url_param2value(param):
             query[k] = [u, v]
 
     return query
+
+
+def from_paths(value):
+    """
+    CONVERT FROM SQUARE BRACKET LEAF FORM TO Data
+    EXAMPLE: columns[1][name]
+    :param value:
+    :return:
+    """
+    output = Data()
+    for k, v in value.items():
+        path = k.split("[")
+        if any(not p.endswith("]") for p in path[1:]):
+            Log.error("expecting square brackets to be paired")
+        path = [int(pp) if is_integer(pp) else pp for i, p in enumerate(path) for pp in [p.rstrip("]") if i > 0 else p]]
+
+        d = output
+        for p, q in zip(path, path[1:]):
+            if is_null(d[p]):
+                if is_text(q):
+                    d[p] = {}
+                else:
+                    d[p] = []
+            elif is_text(q) == is_list(d[p]):
+                Log.error("can not index {{type}} with {{key}}", type=type(d[p]).__name__, key=q)
+
+            d = d[p]
+        d[path[-1]] = v
+
+    return output
 
 
 def value2url_param(value):
@@ -339,3 +367,14 @@ def value2url_param(value):
     else:
         output = _encode(value2json(value))
     return output
+
+def is_integer(s):
+    if s is True or s is False:
+        return False
+
+    try:
+        if float(s) == round(float(s), 0):
+            return True
+        return False
+    except Exception:
+        return False
