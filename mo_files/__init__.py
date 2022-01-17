@@ -18,13 +18,14 @@ from datetime import datetime
 from mimetypes import MimeTypes
 from tempfile import NamedTemporaryFile, mkdtemp
 
+from mo_math import randoms
+
 from mo_dots import Null, coalesce, get_module, is_list
 from mo_files import mimetype
 from mo_files.url import URL
 from mo_future import PY3, text, is_text
 from mo_logs import Except, Log
 from mo_logs.exceptions import get_stacktrace
-from mo_math import randoms
 
 
 class File(object):
@@ -48,7 +49,7 @@ class File(object):
         """
         if isinstance(filename, File):
             return
-        elif not isinstance(filename, (str, text)):
+        elif not is_text(filename):
             Log.error('Expecting str, not {{type}}', type=type(filename).__name__)
 
         self.key = base642bytearray(key)
@@ -368,13 +369,18 @@ class File(object):
 
     def create(self):
         try:
-            os.makedirs(self._filename)
+            os.makedirs(self.abspath)
+        except FileExistsError:
+            pass
         except Exception as e:
             Log.error(u"Could not make directory {{dir_name}}", dir_name=self._filename, cause=e)
 
     @property
     def children(self):
-        return [File(self._filename + "/" + c) for c in os.listdir(self.filename)]
+        try:
+            return [File(self._filename + "/" + c) for c in os.listdir(self.filename)]
+        except FileNotFoundError:
+            return []
 
     @property
     def decendants(self):
