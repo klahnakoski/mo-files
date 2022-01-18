@@ -59,12 +59,13 @@ class TestURLs(FuzzyTestCase):
 
     def test_encoding(self):
         to_query = [
-            # [{"a": None}, ""],
-            # [{"a": [1, None, ""]}, "a=1"],
+            [{"a": None}, ""],
+            [{"a": [1, None, ""]}, "a=1"],
             [{"a": " "}, "a=+"],
             [{"a": "  "}, "a=++"],
             [{"a": [1, "alpha"]}, "a=1,alpha"],
             [{"a": {"b": [1, "alpha"]}}, "a.b=1,alpha"],
+            [{"a": '{"a": 1}'}, 'a="%7b\\"a\\":+1%7d"'],
         ]
 
         for q, e in to_query:
