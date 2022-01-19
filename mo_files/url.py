@@ -286,7 +286,7 @@ def url_param2value(param):
             k = p
             v = True
         else:
-            k, v = p.split("=")
+            k, v = p.split("=", 1)
             k = _decode(k)
             v = _decode(v)
 
@@ -361,9 +361,10 @@ def value2url_param(value):
     elif is_binary(value):
         output = "".join(_map2url[c] for c in value)
     elif is_many(value):
-        output = ",".join(
-            vv for v in value for vv in [value2url_param(v)] if vv or vv == 0
-        )
+        if any(is_data(v) or is_many(v) for v in value):
+            output = _encode(value2json(value))
+        else:
+            output = ",".join(vv for v in value for vv in [value2url_param(v)] if vv or vv == 0)
     else:
         output = _encode(value2json(value))
     return output
