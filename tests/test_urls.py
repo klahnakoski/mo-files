@@ -16,9 +16,9 @@ from __future__ import unicode_literals
 from mo_dots import Null
 from mo_json import true, false
 from mo_logs import Log
+from mo_testing.fuzzytestcase import FuzzyTestCase
 
 from mo_files.url import url_param2value, value2url_param, URL, from_paths
-from mo_testing.fuzzytestcase import FuzzyTestCase
 
 
 class TestURLs(FuzzyTestCase):
@@ -52,6 +52,7 @@ class TestURLs(FuzzyTestCase):
             {"a": "ståle"},
             {"/jobs": True},
             {"/jobs?": True},
+            {"value": {"one": {"two": [{"test": 1}, {"test": 2}, "3"]}}},
         ]
 
         for r in reversable:
@@ -59,12 +60,13 @@ class TestURLs(FuzzyTestCase):
 
     def test_encoding(self):
         to_query = [
-            # [{"a": None}, ""],
-            # [{"a": [1, None, ""]}, "a=1"],
+            [{"a": None}, ""],
+            [{"a": [1, None, ""]}, "a=1"],
             [{"a": " "}, "a=+"],
             [{"a": "  "}, "a=++"],
             [{"a": [1, "alpha"]}, "a=1,alpha"],
             [{"a": {"b": [1, "alpha"]}}, "a.b=1,alpha"],
+            [{"a": '{"a": 1}'}, 'a="%7b\\"a\\":+1%7d"'],
         ]
 
         for q, e in to_query:
@@ -159,3 +161,7 @@ class TestURLs(FuzzyTestCase):
             "start": 0,
         }
         self.assertAlmostEqual(struct, expected)
+
+    def test_reversable2(self):
+        r = {"value": {"one": {"two": [{"test": 1}, {"test": 2}, "3"]}}}
+        self.assertEqual(url_param2value(value2url_param(r)), r)
