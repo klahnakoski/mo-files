@@ -165,3 +165,9 @@ class TestURLs(FuzzyTestCase):
     def test_reversable2(self):
         r = {"value": {"one": {"two": [{"test": 1}, {"test": 2}, "3"]}}}
         self.assertEqual(url_param2value(value2url_param(r)), r)
+
+    def test_add_query(self):
+        a = URL("https://example.com/path?x=1")
+        b = a + {"y": 2}
+        self.assertTrue(a.query.y == None)
+        self.assertEqual(b.query, {"x": 1, "y": 2})
