@@ -101,7 +101,7 @@ class URL(object):
         output.host = self.host
         output.port = self.port
         output.path = self.path
-        output.query = self.query
+        output.query = Data(**self.query)
         output.fragment = self.fragment
         return output
 
