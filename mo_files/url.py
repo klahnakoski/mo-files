@@ -354,6 +354,7 @@ def value2url_param(value):
         )
     elif is_text(value):
         try:
+            # IF STRING LOOKS LIKE JSON, THEN IT IS AMBIGUOUS, ENCODE IT
             json2value(value)
             output = _encode(value2json(value))
         except Exception:
