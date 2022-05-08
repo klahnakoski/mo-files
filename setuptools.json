@@ -4,6 +4,7 @@
     "classifiers": [
         "Development Status :: 4 - Beta",
         "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Topic :: Software Development :: Libraries",
         "Topic :: Software Development :: Libraries :: Python Modules",
@@ -34,6 +35,6 @@
     "name": "mo-files",
     "packages": ["mo_files"],
     "url": "https://github.com/klahnakoski/mo-files",
-    "version": "4.180.22128",
+    "version": "4.181.22128",
     "zip_safe": false
 }
