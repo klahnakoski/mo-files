@@ -5,7 +5,7 @@ from setuptools import setup
 setup(
     author='Kyle Lahnakoski',
     author_email='kyle@lahnakoski.com',
-    classifiers=["Development Status :: 4 - Beta","Programming Language :: Python :: 3.7","Programming Language :: Python :: 3.9","Topic :: Software Development :: Libraries","Topic :: Software Development :: Libraries :: Python Modules","License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)"],
+    classifiers=["Development Status :: 4 - Beta","Programming Language :: Python :: 3.7","Programming Language :: Python :: 3.8","Programming Language :: Python :: 3.9","Topic :: Software Development :: Libraries","Topic :: Software Development :: Libraries :: Python Modules","License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)"],
     description='More Files! Steamlined for UTF8 and JSON.',
     extras_require={"tests":["mo-testing"]},
     include_package_data=True,
@@ -16,6 +16,6 @@ setup(
     name='mo-files',
     packages=["mo_files"],
     url='https://github.com/klahnakoski/mo-files',
-    version='4.180.22128',
+    version='4.181.22128',
     zip_safe=False
 )
