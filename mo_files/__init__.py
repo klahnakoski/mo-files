@@ -103,7 +103,7 @@ class File(object):
             return home_path + self._filename[1::]
         else:
             if os.sep == "\\":
-                return os.path.abspath(self._filename).replace(os.sep, "/")
+                return "/" + os.path.abspath(self._filename).replace(os.sep, "/")
             else:
                 return os.path.abspath(self._filename)
 
