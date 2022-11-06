@@ -18,14 +18,13 @@ from datetime import datetime
 from mimetypes import MimeTypes
 from tempfile import NamedTemporaryFile, mkdtemp
 
-from mo_math import randoms
-
 from mo_dots import Null, coalesce, get_module, is_list
 from mo_files import mimetype
 from mo_files.url import URL
-from mo_future import PY3, text, is_text
+from mo_future import text, is_text
 from mo_logs import Except, Log
 from mo_logs.exceptions import get_stacktrace
+from mo_math import randoms
 
 
 class File(object):
@@ -103,7 +102,7 @@ class File(object):
             return home_path + self._filename[1::]
         else:
             if os.sep == "\\":
-                return os.path.abspath(self._filename).replace(os.sep, "/")
+                return "/" + os.path.abspath(self._filename).replace(os.sep, "/")
             else:
                 return os.path.abspath(self._filename)
 
@@ -233,7 +232,7 @@ class File(object):
         from mo_json import json2value
 
         content = self.read(encoding=encoding)
-        value = json2value(content, flexible=flexible, leaves=leaves)
+        value = json2value(content, flexible=flexible)
         abspath = self.abspath
         if os.sep == "\\":
             abspath = "/" + abspath.replace(os.sep, "/")
@@ -369,7 +368,7 @@ class File(object):
 
     def create(self):
         try:
-            os.makedirs(self.abspath)
+            os.makedirs(os_path(self.abspath))
         except FileExistsError:
             pass
         except Exception as e:
@@ -386,14 +385,14 @@ class File(object):
     def decendants(self):
         yield self
         if self.is_directory():
-            for c in os.listdir(self.abspath):
+            for c in os.listdir(os_path(self.abspath)):
                 child = File(self._filename + "/" + c)
                 for cc in child.decendants:
                     yield cc
 
     @property
     def leaves(self):
-        for c in os.listdir(self.abspath):
+        for c in os.listdir(os_path(self.abspath)):
             child = File(self._filename + "/" + c)
             if child.is_directory():
                 for l in child.leaves:
@@ -507,24 +506,17 @@ class TempFile(File):
 
 def _copy(from_, to_):
     if from_.is_directory():
-        for c in os.listdir(from_.abspath):
+        for c in os.listdir(os_path(from_.abspath)):
             _copy(from_ / c, to_ / c)
     else:
         File.new_instance(to_).write_bytes(File.new_instance(from_).read_bytes())
 
 
-if PY3:
-    def base642bytearray(value):
-        if value == None:
-            return bytearray(b"")
-        else:
-            return bytearray(base64.b64decode(value))
-else:
-    def base642bytearray(value):
-        if value == None:
-            return bytearray(b"")
-        else:
-            return bytearray(base64.b64decode(value))
+def base642bytearray(value):
+    if value == None:
+        return bytearray(b"")
+    else:
+        return bytearray(base64.b64decode(value))
 
 
 def datetime2string(value, format="%Y-%m-%d %H:%M:%S"):
@@ -616,3 +608,12 @@ def add_suffix(filename, suffix):
     parts[i] = parts[i] + "." + text(suffix).strip(".")
     path[-1] = ".".join(parts)
     return File("/".join(path))
+
+
+def os_path(path):
+    """
+    :return: OS-specific path
+    """
+    if os.sep == "/":
+        return path
+    return str(path).lstrip("/")
