@@ -377,7 +377,7 @@ class File(object):
     @property
     def children(self):
         try:
-            return [File(self._filename + "/" + c) for c in os.listdir(self.filename)]
+            return [File(self._filename + "/" + c) for c in os.listdir(self.rel_path)]
         except FileNotFoundError:
             return []
 
@@ -501,7 +501,7 @@ class TempFile(File):
     def __exit__(self, exc_type, exc_val, exc_tb):
         from mo_threads import Thread
 
-        Thread.run("delete file " + self.filename, delete_daemon, file=self, caller_stack=get_stacktrace(1)).release()
+        Thread.run("delete file " + self.rel_path, delete_daemon, file=self, caller_stack=get_stacktrace(1)).release()
 
 
 def _copy(from_, to_):
