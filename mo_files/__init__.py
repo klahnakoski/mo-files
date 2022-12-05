@@ -106,6 +106,7 @@ class File(object):
             else:
                 return os.path.abspath(self._filename)
 
+    @property
     def os_path(self):
         """
         :return: OS-specific path
