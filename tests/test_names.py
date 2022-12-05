@@ -47,7 +47,7 @@ class TestNames(FuzzyTestCase):
 
     def test_concat(self):
         f = File.new_instance("tests/temp") / "something" / "or" / "other"
-        self.assertTrue(f.abspath.endswith("/tests/temp/something/or/other"))
+        self.assertTrue(f.abs_path.endswith("/tests/temp/something/or/other"))
 
     def test_empty(self):
         test = join_path("test", "")
