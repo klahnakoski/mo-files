@@ -377,7 +377,7 @@ class File(object):
 
     def create(self):
         try:
-            os.makedirs(os_path(self.abs_path))
+            os.makedirs(self.os_path)
         except FileExistsError:
             pass
         except Exception as e:
@@ -394,14 +394,14 @@ class File(object):
     def decendants(self):
         yield self
         if self.is_directory():
-            for c in os.listdir(os_path(self.abs_path)):
+            for c in os.listdir(self.os_path):
                 child = File(self._filename + "/" + c)
                 for cc in child.decendants:
                     yield cc
 
     @property
     def leaves(self):
-        for c in os.listdir(os_path(self.abs_path)):
+        for c in os.listdir(self.os_path):
             child = File(self._filename + "/" + c)
             if child.is_directory():
                 for l in child.leaves:
@@ -515,7 +515,7 @@ class TempFile(File):
 
 def _copy(from_, to_):
     if from_.is_directory():
-        for c in os.listdir(os_path(from_.abs_path)):
+        for c in os.listdir(from_.os_path):
             _copy(from_ / c, to_ / c)
     else:
         File.new_instance(to_).write_bytes(File.new_instance(from_).read_bytes())
