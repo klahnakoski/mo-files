@@ -87,7 +87,7 @@ class File(object):
         return output
 
     @property
-    def filename(self):
+    def rel_path(self):
         return self._filename
 
     @property
@@ -121,7 +121,7 @@ class File(object):
             return parts[-1]
 
     @property
-    def name(self):
+    def stem(self):
         parts = self.abspath.split("/")[-1].split(".")
         if len(parts) == 1:
             return parts[0]
@@ -476,7 +476,7 @@ class TempDirectory(File):
     def __exit__(self, exc_type, exc_val, exc_tb):
         from mo_threads import Thread
 
-        Thread.run("delete dir " + self.name, delete_daemon, file=self, caller_stack=get_stacktrace(1)).release()
+        Thread.run("delete dir " + self.stem, delete_daemon, file=self, caller_stack=get_stacktrace(1)).release()
 
 
 class TempFile(File):
@@ -501,7 +501,7 @@ class TempFile(File):
     def __exit__(self, exc_type, exc_val, exc_tb):
         from mo_threads import Thread
 
-        Thread.run("delete file " + self.name, delete_daemon, file=self, caller_stack=get_stacktrace(1)).release()
+        Thread.run("delete file " + self.filename, delete_daemon, file=self, caller_stack=get_stacktrace(1)).release()
 
 
 def _copy(from_, to_):

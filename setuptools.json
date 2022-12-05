@@ -35,6 +35,6 @@
     "name": "mo-files",
     "packages": ["mo_files"],
     "url": "https://github.com/klahnakoski/mo-files",
-    "version": "5.252.22317",
+    "version": "6.252.22317",
     "zip_safe": false
 }
