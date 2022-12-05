@@ -7,7 +7,17 @@
 # Contact: Kyle Lahnakoski (kyle@lahnakoski.com)
 #
 
-from mo_dots import Data, Null, coalesce, is_data, is_list, to_data, is_many, unwraplist, is_null
+from mo_dots import (
+    Data,
+    Null,
+    coalesce,
+    is_data,
+    is_list,
+    to_data,
+    is_many,
+    unwraplist,
+    is_null,
+)
 from mo_future import PY2, is_text, text, unichr, urlparse, is_binary
 from mo_logs import Log
 
@@ -313,7 +323,11 @@ def from_paths(value):
         path = k.split("[")
         if any(not p.endswith("]") for p in path[1:]):
             Log.error("expecting square brackets to be paired")
-        path = [int(pp) if is_integer(pp) else pp for i, p in enumerate(path) for pp in [p.rstrip("]") if i > 0 else p]]
+        path = [
+            int(pp) if is_integer(pp) else pp
+            for i, p in enumerate(path)
+            for pp in [p.rstrip("]") if i > 0 else p]
+        ]
 
         d = output
         for p, q in zip(path, path[1:]):
@@ -323,7 +337,11 @@ def from_paths(value):
                 else:
                     d[p] = []
             elif is_text(q) == is_list(d[p]):
-                Log.error("can not index {{type}} with {{key}}", type=type(d[p]).__name__, key=q)
+                Log.error(
+                    "can not index {{type}} with {{key}}",
+                    type=type(d[p]).__name__,
+                    key=q,
+                )
 
             d = d[p]
         d[path[-1]] = v
@@ -365,7 +383,9 @@ def value2url_param(value):
         if any(is_data(v) or is_many(v) for v in value):
             output = _encode(value2json(value))
         else:
-            output = ",".join(vv for v in value for vv in [value2url_param(v)] if vv or vv == 0)
+            output = ",".join(
+                vv for v in value for vv in [value2url_param(v)] if vv or vv == 0
+            )
     else:
         output = _encode(value2json(value))
     return output
