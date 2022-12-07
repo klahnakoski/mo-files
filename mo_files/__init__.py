@@ -207,7 +207,7 @@ class File(object):
         RETURN A FILENAME THAT CAN SERVE AS A BACKUP FOR THIS FILE
         """
         suffix = datetime2string(coalesce(timestamp, datetime.now()), "%Y%m%d_%H%M%S")
-        return File.add_suffix(self._filename, suffix)
+        return add_suffix(self._filename, suffix)
 
     def read(self, encoding="utf8"):
         """
@@ -243,10 +243,7 @@ class File(object):
 
         content = self.read(encoding=encoding)
         value = json2value(content, flexible=flexible)
-        abspath = self.abs_path
-        if os.sep == "\\":
-            abspath = "/" + abspath.replace(os.sep, "/")
-        return get_module("mo_json_config").expand(value, "file://" + abspath)
+        return get_module("mo_json_config").expand(value, "file://" + self.abs_path)
 
     def is_directory(self):
         return os.path.isdir(self._filename)
@@ -571,7 +568,6 @@ def datetime2string(value, format="%Y-%m-%d %H:%M:%S"):
             format=format,
             cause=e,
         )
-
 
 def join_path(*path):
     def scrub(i, p):
