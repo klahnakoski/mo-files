@@ -384,7 +384,10 @@ def value2url_param(value):
             output = _encode(value2json(value))
         else:
             output = ",".join(
-                vv for v in value for vv in [value2url_param(v)] if vv or vv == 0
+                vv
+                for v in value
+                for vv in [value2url_param(v)]
+                if vv or vv == 0
             )
     else:
         output = _encode(value2json(value))
