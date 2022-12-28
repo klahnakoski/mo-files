@@ -209,7 +209,7 @@ class File(object):
         suffix = datetime2string(coalesce(timestamp, datetime.now()), "%Y%m%d_%H%M%S")
         return add_suffix(self._filename, suffix)
 
-    def read(self, encoding="utf8"):
+    def read(self, encoding="utf8") -> str:
         """
         :param encoding:
         :return:
