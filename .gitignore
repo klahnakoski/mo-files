@@ -9,5 +9,7 @@ dist
 *.tab
 
 /vendor
-./setup.py
+
+/setup.py
+
 
