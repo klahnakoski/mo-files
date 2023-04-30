@@ -8,13 +8,13 @@ setup(
     description='More Files! Steamlined for UTF8 and JSON.',
     extras_require={"tests":["mo-testing"]},
     include_package_data=True,
-    install_requires=["mo-dots==9.368.23092","mo-future==7.340.23006","mo-json==6.373.23120","mo-logs==7.371.23118","mo-math==7.368.23092"],
+    install_requires=["mo-dots==9.368.23092","mo-future==7.340.23006","mo-json==6.374.23120","mo-logs==7.374.23120","mo-math==7.368.23092"],
     license='MPL 2.0',
     long_description="# More Files!\n\nThe `File` class makes the default assumption all files have cr-delimited unicode content that is UTF-8 encoded. This is great for JSON files. It also provides better operators over some common file manipulations.\n\n\n\n\n\n\n\n## Recent changes\n\n**Version 6.x**\n\nGet a little closer to Python's pathlib module standards\n\n* `stem` - to refer file name without extension\n* `os_path` - to get the os-specific absolute path for use in other Python modules\n* `rel_path` - the given path \n* `abs_path` - added underscore for consistency \n\n\n\n",
     long_description_content_type='text/markdown',
     name='mo-files',
     packages=["mo_files"],
     url='https://github.com/klahnakoski/mo-files',
-    version='6.373.23120',
+    version='6.375.23120',
     zip_safe=False
 )
