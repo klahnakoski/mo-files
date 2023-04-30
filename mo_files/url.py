@@ -6,7 +6,6 @@
 #
 # Contact: Kyle Lahnakoski (kyle@lahnakoski.com)
 #
-
 from mo_dots import (
     Data,
     Null,
