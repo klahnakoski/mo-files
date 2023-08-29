@@ -4,17 +4,17 @@ from setuptools import setup
 setup(
     author='Kyle Lahnakoski',
     author_email='kyle@lahnakoski.com',
-    classifiers=["Development Status :: 4 - Beta","Programming Language :: Python :: 3.7","Programming Language :: Python :: 3.8","Programming Language :: Python :: 3.9","Topic :: Software Development :: Libraries","Topic :: Software Development :: Libraries :: Python Modules","License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)","Programming Language :: Python :: 3.10"],
+    classifiers=["Development Status :: 4 - Beta","Programming Language :: Python :: 3.7","Programming Language :: Python :: 3.8","Programming Language :: Python :: 3.9","Topic :: Software Development :: Libraries","Topic :: Software Development :: Libraries :: Python Modules","License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)","Programming Language :: Python :: 3.10","Programming Language :: Python :: 3.11"],
     description='More Files! Steamlined for UTF8 and JSON.',
     extras_require={"tests":["mo-testing"]},
     include_package_data=True,
-    install_requires=["mo-dots==9.417.23168","mo-future==7.416.23168","mo-json==6.425.23207","mo-logs==8.425.23207","mo-math==7.417.23168"],
+    install_requires=["mo-dots==9.430.23234","mo-future==7.428.23214","mo-json==6.434.23241","mo-logs==8.434.23241","mo-math==7.434.23241"],
     license='MPL 2.0',
     long_description="# More Files!\n\nThe `File` class makes the default assumption all files have cr-delimited unicode content that is UTF-8 encoded. This is great for JSON files. It also provides better operators over some common file manipulations.\n\n\n\n\n\n\n\n## Recent changes\n\n**Version 6.x**\n\nGet a little closer to Python's pathlib module standards\n\n* `stem` - to refer file name without extension\n* `os_path` - to get the os-specific absolute path for use in other Python modules\n* `rel_path` - the given path \n* `abs_path` - added underscore for consistency \n\n\n\n",
     long_description_content_type='text/markdown',
     name='mo-files',
     packages=["mo_files"],
     url='https://github.com/klahnakoski/mo-files',
-    version='6.426.23208',
+    version='6.435.23241',
     zip_safe=False
 )
