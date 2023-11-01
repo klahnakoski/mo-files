@@ -146,12 +146,7 @@ class TestURLs(FuzzyTestCase):
             "draw": 1,
             "escape": true,
             "length": 25,
-            "search": {
-                "caseInsensitive": true,
-                "regex": false,
-                "smart": true,
-                "value": "",
-            },
+            "search": {"caseInsensitive": true, "regex": false, "smart": true, "value": "",},
             "start": 0,
         }
         self.assertAlmostEqual(struct, expected)
@@ -167,6 +162,6 @@ class TestURLs(FuzzyTestCase):
         self.assertEqual(b.query, {"x": 1, "y": 2})
 
     def test_from_mo_json_config(self):
-        url = 'file:///C:/Users/kyle/code/mo-json-config/tests/resources/test_ref_w_parameters.json?metadata=a,b'
+        url = "file:///C:/Users/kyle/code/mo-json-config/tests/resources/test_ref_w_parameters.json?metadata=a,b"
         result = URL(url)
-        self.assertEqual(result.query.metadata, ['a', 'b'])
+        self.assertEqual(result.query.metadata, ["a", "b"])

@@ -226,6 +226,7 @@ class File(object):
         :return: STRING
         """
         from zipfile import ZipFile
+
         with ZipFile(self.abs_path) as zipped:
             for num, zip_name in enumerate(zipped.namelist()):
                 return zipped.open(zip_name).read().decode(encoding)
