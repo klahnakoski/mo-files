@@ -60,6 +60,7 @@ def test_simple_binary(filename):
                 if id % 10000 == 0:
                     Log.note("{{id}}", id=id)
 
+
 test_file = "C:/Users/klahnakoski/git/Datazilla2ElasticSearch/results/recent_old.tab"
 test_simple_binary(test_file)
 test_binary(test_file, 2 ** 14)

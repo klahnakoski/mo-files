@@ -66,26 +66,12 @@ class URL(object):
             Log.error(u"problem parsing {{value}} to URL", value=value, cause=e)
 
     def __nonzero__(self):
-        if (
-            self.scheme
-            or self.host
-            or self.port
-            or self.path
-            or self.query
-            or self.fragment
-        ):
+        if self.scheme or self.host or self.port or self.path or self.query or self.fragment:
             return True
         return False
 
     def __bool__(self):
-        if (
-            self.scheme
-            or self.host
-            or self.port
-            or self.path
-            or self.query
-            or self.fragment
-        ):
+        if self.scheme or self.host or self.port or self.path or self.query or self.fragment:
             return True
         return False
 
@@ -323,9 +309,7 @@ def from_paths(value):
         if any(not p.endswith("]") for p in path[1:]):
             Log.error("expecting square brackets to be paired")
         path = [
-            int(pp) if is_integer(pp) else pp
-            for i, p in enumerate(path)
-            for pp in [p.rstrip("]") if i > 0 else p]
+            int(pp) if is_integer(pp) else pp for i, p in enumerate(path) for pp in [p.rstrip("]") if i > 0 else p]
         ]
 
         d = output
@@ -337,9 +321,7 @@ def from_paths(value):
                     d[p] = []
             elif is_text(q) == is_list(d[p]):
                 Log.error(
-                    "can not index {{type}} with {{key}}",
-                    type=type(d[p]).__name__,
-                    key=q,
+                    "can not index {{type}} with {{key}}", type=type(d[p]).__name__, key=q,
                 )
 
             d = d[p]
@@ -382,12 +364,7 @@ def value2url_param(value):
         if any(is_data(v) or is_many(v) for v in value):
             output = _encode(value2json(value))
         else:
-            output = ",".join(
-                vv
-                for v in value
-                for vv in [value2url_param(v)]
-                if vv or vv == 0
-            )
+            output = ",".join(vv for v in value for vv in [value2url_param(v)] if vv or vv == 0)
     else:
         output = _encode(value2json(value))
     return output
