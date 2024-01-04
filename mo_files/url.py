@@ -87,9 +87,6 @@ class URL(object):
         output.query += other
         return output
 
-    def __unicode__(self):
-        return self.__str__().decode("utf8")  # ASSUME chr<128 ARE VALID UNICODE
-
     def __copy__(self):
         output = URL(None)
         output.scheme = self.scheme
