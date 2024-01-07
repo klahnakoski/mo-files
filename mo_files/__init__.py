@@ -458,9 +458,6 @@ class File(object):
     def __data__(self):
         return self._filename
 
-    def __unicode__(self):
-        return self.abs_path
-
     def __eq__(self, other):
         return isinstance(other, File) and other.abs_path == self.abs_path
 
