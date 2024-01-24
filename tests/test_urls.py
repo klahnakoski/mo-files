@@ -161,6 +161,11 @@ class TestURLs(FuzzyTestCase):
         self.assertTrue(a.query.y == None)
         self.assertEqual(b.query, {"x": 1, "y": 2})
 
+    def test_no_query(self):
+        url = "https://example.com/path#a"
+        a = str(URL(url))
+        self.assertEqual(a, url)
+
     def test_from_mo_json_config(self):
         url = "file:///C:/Users/kyle/code/mo-json-config/tests/resources/test_ref_w_parameters.json?metadata=a,b"
         result = URL(url)
