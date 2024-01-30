@@ -170,3 +170,6 @@ class TestURLs(FuzzyTestCase):
         url = "file:///C:/Users/kyle/code/mo-json-config/tests/resources/test_ref_w_parameters.json?metadata=a,b"
         result = URL(url)
         self.assertEqual(result.query.metadata, ["a", "b"])
+
+    def test_missing_url(self):
+        self.assertEqual(str(URL("")), "")
