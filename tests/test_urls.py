@@ -173,3 +173,15 @@ class TestURLs(FuzzyTestCase):
 
     def test_missing_url(self):
         self.assertEqual(str(URL("")), "")
+
+    def test_no_change0(self):
+        url = "file:///tests/resources"
+        self.assertEqual(str(URL(url)), url)
+
+    def test_no_change1(self):
+        url = "file:///tests/resources"
+        self.assertEqual(str(URL(url)), url)
+
+    def test_no_change2(self):
+        url = "env://EXAMPLE"
+        self.assertEqual(str(URL(url)), url)
