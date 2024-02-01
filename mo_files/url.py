@@ -118,7 +118,7 @@ class URL(object):
         if self.port:
             url = url + ":" + str(self.port)
         if self.path:
-            if self.scheme=="file":
+            if not self.host:
                 url += str(self.path)
             elif self.path[0] == text("/"):
                 url += str(self.path)
