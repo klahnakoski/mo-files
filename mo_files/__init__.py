@@ -16,10 +16,10 @@ from datetime import datetime
 from mimetypes import MimeTypes
 from tempfile import NamedTemporaryFile, mkdtemp
 
-from mo_dots import Null, coalesce, get_module, is_list
+from mo_dots import Null, coalesce, get_module, is_list, to_data
 from mo_files import mimetype
 from mo_files.url import URL
-from mo_future import text, is_text
+from mo_future import text, is_text, ConfigParser, StringIO
 from mo_logs import Except, Log
 from mo_logs.exceptions import get_stacktrace
 from mo_math import randoms
@@ -294,6 +294,22 @@ class File(object):
                     f.write(encrypt(d, self.key).encode("utf8"))
                 else:
                     f.write(d.encode("utf8"))
+
+    def read_ini(self, encoding="utf8"):
+        buff = StringIO(self.read(encoding))
+        config = ConfigParser()
+        config._read(buff, "dummy")
+
+        output = {}
+        for section in config.sections():
+            output[section] = s = {}
+            for k, v in config.items(section):
+                s[k] = v
+        return to_data(output)
+
+    def write_ini(self, data, encoding="utf8"):
+        with open(self.os_path, 'w') as configfile:
+            ConfigParser().write(configfile)
 
     def __iter__(self):
         # NOT SURE HOW TO MAXIMIZE FILE READ SPEED
