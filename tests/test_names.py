@@ -9,7 +9,7 @@
 #
 import os
 
-from mo_files import File, join_path
+from mo_files import File, join_path, URL
 from mo_testing.fuzzytestcase import FuzzyTestCase
 
 
@@ -126,3 +126,25 @@ class TestNames(FuzzyTestCase):
     def test_file_file(self):
         test1 = File(File("test"))
         self.assertEqual(test1.rel_path, "test")
+
+    def test_get_parent(self):
+        url = URL("https://example.com/tests/resources")
+        sibling = url / "../__init__.py"
+        self.assertEqual(sibling.path, "/tests/__init__.py")
+
+    def test_get_top_parent(self):
+        url = URL("https://example.com")
+        sibling = url / "../resources"
+        self.assertEqual(str(sibling), "https://example.com/../resources")
+        self.assertEqual(sibling.path, "/../resources")
+
+    def test_file_get_parent(self):
+        url = URL("file://tests/resources")
+        sibling = url / "../__init__.py"
+        self.assertEqual(sibling.path, "tests/__init__.py")
+
+    def test_file_get_top_parent(self):
+        url = URL("file://")
+        sibling = url / "../resources"
+        self.assertEqual(str(sibling), "file://../resources")
+        self.assertEqual(sibling.path, "../resources")
