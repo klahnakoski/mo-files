@@ -16,18 +16,20 @@
     "extras_require": {"tests": ["mo-testing>=7.523.24033"]},
     "include_package_data": true,
     "install_requires": [
-          "mo-dots==9.549.24062", "mo-future==7.546.24057",   "mo-json==6.556.24070",
-          "mo-logs==8.556.24070",   "mo-math==7.552.24062"
+          "mo-dots==9.562.24075", "mo-future==7.546.24057",   "mo-json==6.562.24075",
+          "mo-logs==8.562.24075",   "mo-math==7.562.24075"
     ],
     "license": "MPL 2.0",
     "long_description": {
         "$concat": [
             "# More Files!",
             "",
+            "[![PyPI Latest Release](https://img.shields.io/pypi/v/mo-files.svg)](https://pypi.org/project/mo-files/)",
+            "[![Build Status](https://github.com/klahnakoski/mo-files/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/klahnakoski/mo-files/actions/workflows/build.yml)",
+            "[![Coverage Status](https://coveralls.io/repos/github/klahnakoski/mo-files/badge.svg?branch=dev)](https://coveralls.io/github/klahnakoski/mo-files?branch=dev)",
+            "[![Downloads](https://pepy.tech/badge/mo-files/month)](https://pepy.tech/project/mo-files)",
+            "",
             "The `File` class makes the default assumption all files have cr-delimited unicode content that is UTF-8 encoded. This is great for JSON files. It also provides better operators over some common file manipulations.",
-            "",
-            "",
-            "",
             "",
             "",
             "",
@@ -41,7 +43,7 @@
             "* `stem` - to refer file name without extension",
             "* `os_path` - to get the os-specific absolute path for use in other Python modules",
             "* `rel_path` - the given path ",
-            "* `abs_path` - added underscore for consistency ",
+            "* `abs_path` - was `abspath`, added underscore for consistency ",
             "",
             "",
             "",
@@ -53,6 +55,6 @@
     "name": "mo-files",
     "packages": ["mo_files"],
     "url": "https://github.com/klahnakoski/mo-files",
-    "version": "6.556.24070",
+    "version": "6.562.24075",
     "zip_safe": false
 }
