@@ -13,11 +13,11 @@
         "Programming Language :: Python :: 3.12"
     ],
     "description": "More Files! Steamlined for UTF8 and JSON.",
-    "extras_require": {"tests": ["mo-testing>=7.523.24033"]},
+    "extras_require": {"tests": ["mo-testing>=7.559.24071"]},
     "include_package_data": true,
     "install_requires": [
-          "mo-dots==9.562.24075", "mo-future==7.546.24057",   "mo-json==6.562.24075",
-          "mo-logs==8.562.24075",   "mo-math==7.562.24075"
+          "mo-dots==9.565.24076", "mo-future==7.546.24057",   "mo-json==6.566.24076",
+          "mo-logs==8.566.24076",   "mo-math==7.565.24076"
     ],
     "license": "MPL 2.0",
     "long_description": {
@@ -55,6 +55,6 @@
     "name": "mo-files",
     "packages": ["mo_files"],
     "url": "https://github.com/klahnakoski/mo-files",
-    "version": "6.562.24075",
+    "version": "6.566.24076",
     "zip_safe": false
 }
