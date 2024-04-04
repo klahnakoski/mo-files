@@ -15,6 +15,6 @@ setup(
     name='mo-files',
     packages=["mo_files"],
     url='https://github.com/klahnakoski/mo-files',
-    version='6.584.24095',
+    version='6.585.24095',
     zip_safe=False
 )
