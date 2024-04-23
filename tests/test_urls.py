@@ -10,11 +10,12 @@
 from mo_dots import Null
 from mo_json import true, false
 from mo_logs import Log
-from mo_testing.fuzzytestcase import FuzzyTestCase
+from mo_testing.fuzzytestcase import FuzzyTestCase, add_error_reporting
 
 from mo_files.url import url_param2value, value2url_param, URL, from_paths
 
 
+@add_error_reporting
 class TestURLs(FuzzyTestCase):
     def test_reversable(self):
         reversable = [
