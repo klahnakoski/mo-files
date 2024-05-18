@@ -1,1 +1,2 @@
-mo-testing>=8.623.24125
+mo-testing
+mo-json-config
