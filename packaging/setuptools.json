@@ -13,7 +13,7 @@
         "Programming Language :: Python :: 3.12"
     ],
     "description": "More Files! Steamlined for UTF8 and JSON.",
-    "extras_require": {"tests": ["mo-testing>=8.623.24125"]},
+    "extras_require": {"tests": ["mo-testing>=8.633.24139"]},
     "include_package_data": true,
     "install_requires": [
          "mo-dots==10.632.24139", "mo-future==7.584.24095",   "mo-json==6.634.24139",
@@ -55,6 +55,6 @@
     "name": "mo-files",
     "packages": ["mo_files"],
     "url": "https://github.com/klahnakoski/mo-files",
-    "version": "6.635.24139",
+    "version": "6.636.24140",
     "zip_safe": false
 }
