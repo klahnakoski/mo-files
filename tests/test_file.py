@@ -1,5 +1,7 @@
 from unittest import TestCase
 
+from mo_dots import Data
+
 from mo_files import File
 
 
@@ -32,8 +34,13 @@ class TestFile(TestCase):
         File("tests/resources/test-file.ini").write("[hello]\nworld=world\n\n[world]\nhello=42")
         self.assertEqual(File("tests/resources/test-file.ini").read_ini(), {"hello": {"world":"world"}, "world": {"hello":"42"}})
 
-    def test_concat(self):
-        result = File("tests/resources/test-concat.json").read_json()
+    def test_concat1(self):
+        result = File("tests/resources/test-concat1.json").read_json()
         self.assertEqual(result, "hello world")
+
+    def test_concat2(self):
+        result = File("tests/resources/test-concat2.json").read_json()
+        self.assertEqual(result, {"a": "hello world"})
+        self.assertIsInstance(result, Data)
 
 
