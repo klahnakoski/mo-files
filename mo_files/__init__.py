@@ -19,7 +19,7 @@ from tempfile import NamedTemporaryFile, mkdtemp
 from mo_dots import Null, coalesce, get_module, is_list, to_data
 from mo_future import text, is_text, ConfigParser, StringIO
 from mo_json import json2value
-from mo_logs import Except, Log
+from mo_logs import Except, logger
 from mo_logs.exceptions import get_stacktrace
 from mo_math import randoms
 
@@ -49,7 +49,7 @@ class File(object):
         if isinstance(filename, File):
             return
         elif not is_text(filename):
-            Log.error("Expecting str, not {{type}}", type=type(filename).__name__)
+            logger.error("Expecting str, not {{type}}", type=type(filename).__name__)
 
         self.key = base642bytearray(key)
         self._mime_type = mime_type
@@ -255,7 +255,7 @@ class File(object):
                 else:
                     return f.read()
         except Exception as e:
-            Log.error("Problem reading file {{filename}}", filename=self.abs_path, cause=e)
+            logger.error("Problem reading file {{filename}}", filename=self.abs_path, cause=e)
 
     def write_bytes(self, content):
         if not self.parent.exists:
@@ -275,7 +275,7 @@ class File(object):
             self.parent.create()
         with open(self._filename, "wb") as f:
             if is_list(content) and self.key:
-                Log.error("list of data and keys are not supported, encrypt before sending to file")
+                logger.error("list of data and keys are not supported, encrypt before sending to file")
 
             if is_list(content):
                 pass
@@ -286,7 +286,7 @@ class File(object):
 
             for d in content:
                 if not is_text(d):
-                    Log.error("Expecting unicode data only")
+                    logger.error("Expecting unicode data only")
                 if self.key:
                     from mo_math.aes_crypto import encrypt
 
@@ -325,7 +325,7 @@ class File(object):
                     for line in f:
                         yield line.decode("utf8").rstrip()
             except Exception as e:
-                Log.error(
+                logger.error(
                     "Can not read line from {{filename}}", filename=self._filename, cause=e,
                 )
 
@@ -339,7 +339,7 @@ class File(object):
             self.parent.create()
         with open(self._filename, "ab") as output_file:
             if not is_text(content):
-                Log.error("expecting to write unicode only")
+                logger.error("expecting to write unicode only")
             output_file.write(content.encode(encoding))
             output_file.write(b"\n")
 
@@ -356,12 +356,12 @@ class File(object):
             with open(self._filename, "ab") as output_file:
                 for c in content:
                     if not isinstance(c, text):
-                        Log.error("expecting to write unicode only")
+                        logger.error("expecting to write unicode only")
 
                     output_file.write(c.encode("utf8"))
                     output_file.write(b"\n")
         except Exception as e:
-            Log.error("Could not write to file", e)
+            logger.error("Could not write to file", e)
 
     def delete(self):
         try:
@@ -377,7 +377,7 @@ class File(object):
                 or "The system cannot find the file specified" in cause
             ):
                 return
-            Log.error("Could not remove file", cause)
+            logger.error("Could not remove file", cause)
 
     def backup(self):
         path = self._filename.split("/")
@@ -398,7 +398,7 @@ class File(object):
         except FileExistsError:
             pass
         except Exception as e:
-            Log.error(
+            logger.error(
                 "Could not make directory {{dir_name}}", dir_name=self._filename, cause=e,
             )
 
@@ -548,7 +548,7 @@ def datetime2string(value, format="%Y-%m-%d %H:%M:%S"):
     try:
         return value.strftime(format)
     except Exception as e:
-        Log.error(
+        logger.error(
             "Can not format {{value}} with {{format}}", value=value, format=format, cause=e,
         )
 
@@ -621,7 +621,7 @@ def delete_daemon(file, caller_stack, please_stop):
             e = Except.wrap(e)
             e.trace = e.trace[0:2] + caller_stack
             if num_attempts:
-                Log.warning("problem deleting file {{file}}", file=file.abs_path, cause=e)
+                logger.warning("problem deleting file {{file}}", file=file.abs_path, cause=e)
             (Till(seconds=10) | please_stop).wait()
         num_attempts += 1
 
