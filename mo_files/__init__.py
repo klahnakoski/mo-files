@@ -240,8 +240,7 @@ class File(object):
         from mo_json import json2value
 
         content = self.read(encoding=encoding)
-        value = json2value(content, flexible=flexible)
-        return get_module("mo_json_config").expand(value, "file://" + self.abs_path)
+        return json2value(content, flexible=flexible)
 
     def is_directory(self):
         return os.path.isdir(self._filename)
