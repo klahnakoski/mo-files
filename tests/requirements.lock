@@ -8,7 +8,7 @@ mo-collections==5.623.24125
 mo-dots==10.632.24139
 mo-future==7.584.24095
 mo-imports==7.584.24095
-mo-json==6.634.24139
+mo-json==6.637.24140
 mo-json-config==3.77.20190
 mo-kwargs==7.632.24139
 mo-logs==8.632.24139
