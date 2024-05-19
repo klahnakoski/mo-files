@@ -16,7 +16,7 @@ from datetime import datetime
 from mimetypes import MimeTypes
 from tempfile import NamedTemporaryFile, mkdtemp
 
-from mo_dots import Null, coalesce, get_module, is_list, to_data
+from mo_dots import Null, coalesce, get_module, is_list, to_data, is_sequence, is_data, is_missing
 from mo_future import text, is_text, ConfigParser, StringIO
 from mo_json import json2value
 from mo_logs import Except, logger
@@ -240,7 +240,8 @@ class File(object):
 
     def read_json(self, encoding="utf8", flexible=True, leaves=True):
         content = self.read(encoding=encoding)
-        return json2value(content, flexible=flexible)
+        value = json2value(content, flexible=flexible)
+        return apply_functions(value)
 
     def is_directory(self):
         return os.path.isdir(self._filename)
@@ -636,3 +637,32 @@ def add_suffix(filename, suffix):
     parts[i] = parts[i] + "." + str(suffix).strip(".")
     path[-1] = ".".join(parts)
     return File("/".join(path))
+
+
+def apply_functions(node):
+    if is_data(node):
+        output = {}
+        diff = False
+        for k, v in node.items():
+            if k == "$concat":
+                diff = True
+                if not is_sequence(v):
+                    logger.error("$concat expects an array of strings")
+                return coalesce(node.get("separator"), "").join(apply_functions(vv) for vv in v)
+            elif is_missing(v):
+                diff = True
+                continue
+            else:
+                vv = apply_functions(v)
+                diff = diff or vv is not v
+                output[k] = vv
+        return output if diff else node
+    elif is_list(node):
+        output = []
+        diff = False
+        for v in node:
+            vv = apply_functions(v)
+            diff = diff or vv is not v
+            output.append(vv)
+        return output if diff else node
+    return node

@@ -32,6 +32,8 @@ class TestFile(TestCase):
         File("tests/resources/test-file.ini").write("[hello]\nworld=world\n\n[world]\nhello=42")
         self.assertEqual(File("tests/resources/test-file.ini").read_ini(), {"hello": {"world":"world"}, "world": {"hello":"42"}})
 
-
+    def test_concat(self):
+        result = File("tests/resources/test-concat.json").read_json()
+        self.assertEqual(result, "hello world")
 
 
