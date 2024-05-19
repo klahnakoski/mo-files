@@ -17,12 +17,14 @@ from mimetypes import MimeTypes
 from tempfile import NamedTemporaryFile, mkdtemp
 
 from mo_dots import Null, coalesce, get_module, is_list, to_data
-from mo_files import mimetype
-from mo_files.url import URL
 from mo_future import text, is_text, ConfigParser, StringIO
+from mo_json import json2value
 from mo_logs import Except, Log
 from mo_logs.exceptions import get_stacktrace
 from mo_math import randoms
+
+from mo_files import mimetype
+from mo_files.url import URL
 
 
 class File(object):
@@ -237,8 +239,6 @@ class File(object):
                 yield line.decode(encoding).rstrip()
 
     def read_json(self, encoding="utf8", flexible=True, leaves=True):
-        from mo_json import json2value
-
         content = self.read(encoding=encoding)
         return json2value(content, flexible=flexible)
 
