@@ -43,4 +43,8 @@ class TestFile(TestCase):
         self.assertEqual(result, {"a": "hello world"})
         self.assertIsInstance(result, Data)
 
+    def test_file_timestamp(self):
+        # careful when changing this file
+        self.assertEqual(File("tests/__init__.py").timestamp, 1568322216)
+
 
