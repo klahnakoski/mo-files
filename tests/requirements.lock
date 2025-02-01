@@ -1,21 +1,21 @@
-# Tests pass with python 3.8 on 2024-06-14 and with these versions
+# Tests pass with python 3.8 on 2025-02-01 and with these versions
 # pip install --no-deps -r tests/requirements.lock
 certifi==2024.2.2
 charset-normalizer==3.3.2
 hjson==3.1.0
 idna==3.7
 mo-collections==5.623.24125
-mo-dots==10.647.24166
+mo-dots==10.659.25005
 mo-future==7.584.24095
 mo-imports==7.584.24095
-mo-json==6.647.24166
+mo-json==6.667.25032
 mo-json-config==3.77.20190
-mo-kwargs==7.647.24166
-mo-logs==8.647.24166
-mo-math==7.647.24166
-mo-testing==8.644.24152
+mo-kwargs==7.659.25005
+mo-logs==8.667.25032
+mo-math==7.659.25005
+mo-testing==8.667.25032
 mo-threads==6.623.24125
-mo-times==5.647.24166
+mo-times==5.667.25032
 pytz==2024.1
 requests==2.31.0
 urllib3==2.2.1
