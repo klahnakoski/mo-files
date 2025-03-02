@@ -21,7 +21,7 @@ from mo_future import is_text, text, unichr, urlparse, is_binary
 from mo_logs import Log
 
 
-class URL(object):
+class URL:
     """
     JUST LIKE urllib.parse() [1], BUT CAN HANDLE JSON query PARAMETERS
 
@@ -63,7 +63,7 @@ class URL(object):
                 self.query = coalesce(query, to_data(url_param2value(output.query)))
                 self.fragment = coalesce(fragment, output.fragment)
         except Exception as e:
-            Log.error(u"problem parsing {{value}} to URL", value=value, cause=e)
+            Log.error("problem parsing {value} to URL", value=value, cause=e)
 
     def __nonzero__(self):
         if self.scheme or self.host or self.port or self.path or self.query or self.fragment:
@@ -78,7 +78,7 @@ class URL(object):
     def __truediv__(self, other):
         if self.scheme == "file" and not self.path:
             # keep relative path
-            path = str(other).lstrip('/')
+            path = str(other).lstrip("/")
         else:
             path = f"{self.path.rstrip('/')}/{str(other).lstrip('/')}"
 
