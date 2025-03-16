@@ -54,15 +54,14 @@ class File:
         self.key = base642bytearray(key)
         self._mime_type = mime_type
 
-        if filename == ".":
-            self._filename = ""
-        elif filename.startswith("~"):
-            home_path = os.path.expanduser("~")
-            if os.sep == "\\":
-                home_path = home_path.replace(os.sep, "/")
-            home_path = home_path.rstrip("/")
-            filename = home_path + "/" + filename[1::].lstrip("/")
-        self._filename = filename.replace(os.sep, "/")  # USE UNIX STANDARD
+        if filename in (".", "/"):
+            self._filename = filename
+        else:
+            if filename.startswith("~"):
+                home_path = os.path.expanduser("~").replace(os.sep, "/").rstrip("/")
+                rel_path = filename[1::].replace(os.sep, "/").lstrip("/")
+                filename = home_path + "/" + rel_path
+            self._filename = filename.replace(os.sep, "/").rstrip("/")
 
         while self._filename.find(".../") >= 0:
             # LET ... REFER TO GRANDPARENT, .... REFER TO GREAT-GRAND-PARENT, etc...
@@ -123,7 +122,7 @@ class File:
 
     @property
     def extension(self):
-        parts = self._filename.split("/")[-1].split(".")
+        parts = self.name.split(".")
         if len(parts) == 1:
             return ""
         else:
@@ -131,11 +130,15 @@ class File:
 
     @property
     def stem(self):
-        parts = self.abs_path.split("/")[-1].split(".")
+        parts = self.name.split(".")
         if len(parts) == 1:
             return parts[0]
         else:
             return ".".join(parts[0:-1])
+
+    @property
+    def name(self):
+        return self._filename.split("/")[-1]
 
     @property
     def mime_type(self):
