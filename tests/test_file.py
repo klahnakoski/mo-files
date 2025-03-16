@@ -1,7 +1,10 @@
+import os
+from datetime import time
 from unittest import TestCase
 
 from mo_dots import Data
 from mo_testing import FuzzyTestCase
+from mo_times import Date
 
 from mo_files import File
 
@@ -45,7 +48,9 @@ class TestFile(FuzzyTestCase):
         self.assertIsInstance(result, Data)
 
     def test_file_timestamp(self):
-        # careful when changing this file
+        file = File("tests/__init__.py")
+        mod_time_epoch = Date(1568322216).unix
+        os.utime(file.os_path, (mod_time_epoch, mod_time_epoch))
         self.assertEqual(File("tests/__init__.py").timestamp, 1568322216)
 
     def test_leaves(self):
