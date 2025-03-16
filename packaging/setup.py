@@ -6,7 +6,7 @@ setup(
     author_email='kyle@lahnakoski.com',
     classifiers=["Development Status :: 4 - Beta","Programming Language :: Python :: 3.8","Programming Language :: Python :: 3.9","Topic :: Software Development :: Libraries","Topic :: Software Development :: Libraries :: Python Modules","License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)","Programming Language :: Python :: 3.10","Programming Language :: Python :: 3.11","Programming Language :: Python :: 3.12","Programming Language :: Python :: 3.13"],
     description='More Files! Steamlined for UTF8 and JSON.',
-    extras_require={"tests":["mo-testing>=8.667.25032"]},
+    extras_require={"tests":["mo-testing>=8.674.25037"]},
     include_package_data=True,
     install_requires=["mo-dots==10.678.25061","mo-future==7.678.25061","mo-json==6.679.25061","mo-logs==8.678.25061","mo-math==7.678.25061"],
     license='MPL 2.0',
@@ -15,6 +15,6 @@ setup(
     name='mo-files',
     packages=["mo_files"],
     url='https://github.com/klahnakoski/mo-files',
-    version='6.679.25061',
+    version='6.681.25075',
     zip_safe=False
 )
