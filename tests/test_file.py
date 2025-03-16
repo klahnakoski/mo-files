@@ -1,11 +1,12 @@
 from unittest import TestCase
 
 from mo_dots import Data
+from mo_testing import FuzzyTestCase
 
 from mo_files import File
 
 
-class TestFile(TestCase):
+class TestFile(FuzzyTestCase):
 
     def test_read_file(self):
         self.assertEqual(File("tests/resources/test-file.txt").read(), 'Hello, World!')
@@ -47,4 +48,15 @@ class TestFile(TestCase):
         # careful when changing this file
         self.assertEqual(File("tests/__init__.py").timestamp, 1568322216)
 
-
+    def test_leaves(self):
+        files = list(f.name for f in File("tests/resources/").leaves)
+        self.assertAlmostEqual(files, {
+            "test-concat1.json",
+            "test-concat2.json",
+            "test-file.ini",
+            "test-file.json",
+            "test-file.txt",
+            "test-file0.txt",
+            "test-file1.txt",
+            "test-file2.txt",
+        })
