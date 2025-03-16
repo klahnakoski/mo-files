@@ -97,8 +97,8 @@ class TestNames(FuzzyTestCase):
         test4 = File("~test.json")
         test5 = File("~") / "test.json"
 
-        self.assertEqual(test1.rel_path, home_path + "/")
-        self.assertEqual(test2.rel_path, home_path + "/")
+        self.assertEqual(test1.rel_path, home_path)
+        self.assertEqual(test2.rel_path, home_path)
         self.assertEqual(test3.rel_path, home_path + "/test.json")
         self.assertEqual(test4.rel_path, home_path + "/test.json")
         self.assertEqual(test5.rel_path, home_path + "/test.json")

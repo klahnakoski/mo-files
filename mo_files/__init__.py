@@ -54,15 +54,14 @@ class File:
         self.key = base642bytearray(key)
         self._mime_type = mime_type
 
-        if filename == ".":
-            self._filename = ""
-        elif filename.startswith("~"):
-            home_path = os.path.expanduser("~")
-            if os.sep == "\\":
-                home_path = home_path.replace(os.sep, "/")
-            home_path = home_path.rstrip("/")
-            filename = home_path + "/" + filename[1::].lstrip("/")
-        self._filename = filename.replace(os.sep, "/").rstrip("/")  # USE UNIX STANDARD
+        if filename in (".", "/"):
+            self._filename = filename
+        else:
+            if filename.startswith("~"):
+                home_path = os.path.expanduser("~").replace(os.sep, "/").rstrip("/")
+                rel_path = filename[1::].replace(os.sep, "/").lstrip("/")
+                filename = home_path + "/" + rel_path
+            self._filename = filename.replace(os.sep, "/").rstrip("/")
 
         while self._filename.find(".../") >= 0:
             # LET ... REFER TO GRANDPARENT, .... REFER TO GREAT-GRAND-PARENT, etc...
