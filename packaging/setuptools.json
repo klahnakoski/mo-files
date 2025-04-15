@@ -17,7 +17,7 @@
     "extras_require": {"tests": ["mo-testing>=8.674.25037"]},
     "include_package_data": true,
     "install_requires": [
-         "mo-dots==10.678.25061", "mo-future==7.678.25061",   "mo-json==6.679.25061",
+         "mo-dots==10.678.25061", "mo-future==7.678.25061",   "mo-json==6.682.25104",
           "mo-logs==8.678.25061",   "mo-math==7.678.25061"
     ],
     "license": "MPL 2.0",
@@ -56,6 +56,6 @@
     "name": "mo-files",
     "packages": ["mo_files"],
     "url": "https://github.com/klahnakoski/mo-files",
-    "version": "6.681.25075",
+    "version": "6.682.25104",
     "zip_safe": false
 }
