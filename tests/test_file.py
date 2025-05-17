@@ -73,6 +73,7 @@ class TestFile(FuzzyTestCase):
         self.assertTrue(backup_file.exists)
         self.assertEqual(backup_file.name, f"test-file.backup {now}.txt")
         self.assertEqual(backup_file.read(), "Hello, World!")
+        backup_file.delete()
 
     def test_backup_filename(self):
         file = File("tests/resources/test-file.txt")
@@ -81,3 +82,4 @@ class TestFile(FuzzyTestCase):
         self.assertTrue(backup_file.exists)
         self.assertEqual(backup_file.name, f"test-file.backup{now}.txt")
         self.assertEqual(backup_file.read(), "Hello, World!")
+        backup_file.delete()
