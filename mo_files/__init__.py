@@ -207,7 +207,7 @@ class File:
         """
         RETURN A FILENAME THAT CAN SERVE AS A BACKUP FOR THIS FILE
         """
-        suffix = datetime2string(coalesce(timestamp, datetime.now()), "%Y%m%d_%H%M%S")
+        suffix = datetime2string(coalesce(timestamp, datetime.utcnow()), "%Y%m%d_%H%M%S")
         return add_suffix(self._filename, suffix)
 
     def read(self, encoding="utf8") -> str:
@@ -391,18 +391,17 @@ class File:
                 return
             logger.error("Could not remove file", cause)
 
-    def backup(self):
+    def backup(self, format=" %Y%m%d %H%M%S"):
         path = self._filename.split("/")
         names = path[-1].split(".")
+        backup_name = f"backup{datetime.utcnow().strftime(format)}"
         if len(names) == 1 or names[0] == "":
-            backup = File(self._filename + ".backup " + datetime.utcnow().strftime("%Y%m%d %H%M%S"))
+            names.append(backup_name)
         else:
-            backup = File.new_instance(
-                "/".join(path[:-1]),
-                ".".join(names[:-1]) + ".backup " + datetime.now().strftime("%Y%m%d %H%M%S") + "." + names[-1],
-            )
-        File.copy(self, backup)
-        return backup
+            names.insert(-1, backup_name)
+        backup_file = File.new_instance("/".join(path[:-1]), ".".join(names))
+        File.copy(self, backup_file)
+        return backup_file
 
     def create(self):
         try:

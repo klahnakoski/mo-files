@@ -65,3 +65,19 @@ class TestFile(FuzzyTestCase):
             "test-file1.txt",
             "test-file2.txt",
         })
+
+    def test_backup(self):
+        file = File("tests/resources/test-file.txt")
+        now = Date.now().format("%Y%m%d %H%M%S")
+        backup_file = file.backup()
+        self.assertTrue(backup_file.exists)
+        self.assertEqual(backup_file.name, f"test-file.backup {now}.txt")
+        self.assertEqual(backup_file.read(), "Hello, World!")
+
+    def test_backup_filename(self):
+        file = File("tests/resources/test-file.txt")
+        now = Date.now().format("-%Y-%m")
+        backup_file = file.backup("-%Y-%m")
+        self.assertTrue(backup_file.exists)
+        self.assertEqual(backup_file.name, f"test-file.backup{now}.txt")
+        self.assertEqual(backup_file.read(), "Hello, World!")
