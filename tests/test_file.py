@@ -56,6 +56,7 @@ class TestFile(FuzzyTestCase):
     def test_leaves(self):
         files = list(f.name for f in File("tests/resources/").leaves)
         self.assertAlmostEqual(files, {
+            "empty.json",
             "test-concat1.json",
             "test-concat2.json",
             "test-file.ini",
@@ -163,4 +164,30 @@ class TestFile(FuzzyTestCase):
         file = File("tests/resources/test-file")
         new_file = file.set_extension("xml")
         self.assertEqual(new_file.name, "test-file.xml")
+
+    def test_descendants(self):
+        file = File("tests/resources")
+        descendants = list(file.descendants)
+        self.assertEqual(len(descendants), 11)
+        self.assertIn(File("tests/resources/test-file.txt"), descendants)
+        self.assertIn(File("tests/resources/test-file.json"), descendants)
+        self.assertIn(File("tests/resources/test-file2.txt"), descendants)
+        self.assertIn(File("tests/resources/deep/empty.json"), descendants)
+        self.assertIn(file, descendants)
+
+    def test_leaves(self):
+        file = File("tests/resources")
+        leaves = list(file.leaves)
+        self.assertEqual(len(leaves), 9)
+        self.assertIn(File("tests/resources/test-file.txt"), leaves)
+        self.assertIn(File("tests/resources/test-file.json"), leaves)
+        self.assertIn(File("tests/resources/test-file2.txt"), leaves)
+        self.assertIn(File("tests/resources/deep/empty.json"), leaves)
+
+    def test_children(self):
+        file = File("tests/resources")
+        children = list(file.children)
+        self.assertEqual(len(children), 9)
+        self.assertIn(File("tests/resources/test-file.txt"), children)
+        self.assertIn(File("tests/resources/deep"), children)
 

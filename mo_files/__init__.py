@@ -423,21 +423,18 @@ class File:
             return []
 
     @property
-    def decendants(self):
+    def descendants(self):
         yield self
         if self.is_directory():
             for c in os.listdir(self.os_path):
-                child = File(self._filename + "/" + c)
-                for cc in child.decendants:
-                    yield cc
+                yield from File(self._filename + "/" + c).descendants
 
     @property
     def leaves(self):
         for c in os.listdir(self.os_path):
             child = File(self._filename + "/" + c)
             if child.is_directory():
-                for l in child.leaves:
-                    yield l
+                yield from child.leaves
             else:
                 yield child
 
