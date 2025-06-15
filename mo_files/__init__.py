@@ -179,6 +179,8 @@ class File:
         parts = path[-1].split(".")
         if len(parts) == 1:
             parts.append(ext)
+        elif is_missing(ext):
+            parts.pop()
         else:
             parts[-1] = ext
 
