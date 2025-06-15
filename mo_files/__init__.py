@@ -54,8 +54,8 @@ class File:
         self.key = base642bytearray(key)
         self._mime_type = mime_type
 
-        if filename in (".", "/"):
-            self._filename = filename
+        if filename in (".", "/", ""):
+            self._filename = filename or "."
         else:
             if filename.startswith("~"):
                 home_path = os.path.expanduser("~").replace(os.sep, "/").rstrip("/")
@@ -449,12 +449,9 @@ class File:
 
     @property
     def exists(self):
-        if self._filename in ["", "."]:
-            return True
-        try:
-            return os.path.exists(self._filename)
-        except Exception:
-            return False
+        return os.path.exists(self._filename)
+
+    __bool__ = __nonzero__ = exists
 
     @property
     def length(self):
@@ -462,19 +459,6 @@ class File:
 
     size = length
 
-    def __bool__(self):
-        return self.__nonzero__()
-
-    def __nonzero__(self):
-        """
-        USED FOR FILE EXISTENCE TESTING
-        """
-        if self._filename in ["", "."]:
-            return True
-        try:
-            return os.path.exists(self._filename)
-        except Exception as e:
-            return False
 
     @classmethod
     def copy(cls, from_, to_):

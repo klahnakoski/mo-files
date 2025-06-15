@@ -31,14 +31,14 @@ class TestNames(FuzzyTestCase):
 
     def test_relative_name(self):
         f = File("test.txt")
-        self.assertEqual(f.parent.rel_path, "")
+        self.assertEqual(f.parent.rel_path, ".")
         self.assertEqual(f.parent.parent.rel_path, "..")
         self.assertEqual(f.parent.parent.parent.rel_path, ".." + par)
 
     def test_relative_path(self):
         f = File("a/test.txt")
         self.assertEqual(f.parent.rel_path, "a")
-        self.assertEqual(f.parent.parent.rel_path, "")
+        self.assertEqual(f.parent.parent.rel_path, ".")
         self.assertEqual(f.parent.parent.parent.rel_path, "..")
 
     def test_grandparent(self):
