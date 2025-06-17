@@ -451,11 +451,11 @@ class File:
         else:
             return File("/".join(self._filename.split("/")[:-1]))
 
-    @property
-    def exists(self):
+    def __bool__(self):
         return os.path.exists(self._filename)
 
-    __bool__ = __nonzero__ = exists
+    __nonzero__ = __bool__
+    exists = property(__bool__)
 
     @property
     def length(self):

@@ -195,3 +195,13 @@ class TestFile(FuzzyTestCase):
         file = File("C:/")
         refile = File(file.abs_path)
         self.assertEqual(file.abs_path, refile.abs_path)
+
+    def test_exists(self):
+        file = File("tests/resources/test-file.txt")
+        self.assertTrue(file.exists)
+        self.assertTrue(file)
+        self.assertTrue(bool(file))
+        non_existent_file = File("tests/resources/non_existent.txt")
+        self.assertFalse(non_existent_file.exists)
+        self.assertFalse(non_existent_file)
+        self.assertFalse(bool(non_existent_file))
