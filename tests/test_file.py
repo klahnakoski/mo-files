@@ -191,3 +191,7 @@ class TestFile(FuzzyTestCase):
         self.assertIn(File("tests/resources/test-file.txt"), children)
         self.assertIn(File("tests/resources/deep"), children)
 
+    def test_windows_root(self):
+        file = File("C:/")
+        refile = File(file.abs_path)
+        self.assertEqual(file.abs_path, refile.abs_path)

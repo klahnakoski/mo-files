@@ -26,6 +26,8 @@ from mo_math import randoms
 from mo_files import mimetype
 from mo_files.url import URL
 
+windows_drive = re.compile(r"^/[a-zA-Z]:[/\\]")
+
 
 class File:
     """
@@ -56,6 +58,8 @@ class File:
 
         if filename in (".", "/", ""):
             self._filename = filename or "."
+        elif os.sep == "\\" and windows_drive.match(filename):
+            self._filename = filename[1:]
         else:
             if filename.startswith("~"):
                 home_path = os.path.expanduser("~").replace(os.sep, "/").rstrip("/")
