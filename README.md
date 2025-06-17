@@ -10,9 +10,11 @@ The `File` class makes the default assumption all files have cr-delimited unicod
 
 
 
-## Recent changes
+## Breaking changes
 
-**Version 6.x**
+### Version 6.x
+
+**December 2022**
 
 Get a little closer to Python's pathlib module standards
 

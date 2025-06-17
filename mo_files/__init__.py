@@ -26,6 +26,8 @@ from mo_math import randoms
 from mo_files import mimetype
 from mo_files.url import URL
 
+windows_drive = re.compile(r"^/[a-zA-Z]:[/\\]")
+
 
 class File:
     """
@@ -54,8 +56,10 @@ class File:
         self.key = base642bytearray(key)
         self._mime_type = mime_type
 
-        if filename in (".", "/"):
-            self._filename = filename
+        if filename in (".", "/", ""):
+            self._filename = filename or "."
+        elif os.sep == "\\" and windows_drive.match(filename):
+            self._filename = filename[1:]
         else:
             if filename.startswith("~"):
                 home_path = os.path.expanduser("~").replace(os.sep, "/").rstrip("/")
@@ -179,6 +183,8 @@ class File:
         parts = path[-1].split(".")
         if len(parts) == 1:
             parts.append(ext)
+        elif is_missing(ext):
+            parts.pop()
         else:
             parts[-1] = ext
 
@@ -421,21 +427,18 @@ class File:
             return []
 
     @property
-    def decendants(self):
+    def descendants(self):
         yield self
         if self.is_directory():
             for c in os.listdir(self.os_path):
-                child = File(self._filename + "/" + c)
-                for cc in child.decendants:
-                    yield cc
+                yield from File(self._filename + "/" + c).descendants
 
     @property
     def leaves(self):
         for c in os.listdir(self.os_path):
             child = File(self._filename + "/" + c)
             if child.is_directory():
-                for l in child.leaves:
-                    yield l
+                yield from child.leaves
             else:
                 yield child
 
@@ -450,12 +453,9 @@ class File:
 
     @property
     def exists(self):
-        if self._filename in ["", "."]:
-            return True
-        try:
-            return os.path.exists(self._filename)
-        except Exception:
-            return False
+        return os.path.exists(self._filename)
+
+    __bool__ = __nonzero__ = exists
 
     @property
     def length(self):
@@ -463,19 +463,6 @@ class File:
 
     size = length
 
-    def __bool__(self):
-        return self.__nonzero__()
-
-    def __nonzero__(self):
-        """
-        USED FOR FILE EXISTENCE TESTING
-        """
-        if self._filename in ["", "."]:
-            return True
-        try:
-            return os.path.exists(self._filename)
-        except Exception as e:
-            return False
 
     @classmethod
     def copy(cls, from_, to_):

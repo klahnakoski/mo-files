@@ -35,9 +35,11 @@
             "",
             "",
             "",
-            "## Recent changes",
+            "## Breaking changes",
             "",
-            "**Version 6.x**",
+            "### Version 6.x",
+            "",
+            "**December 2022**",
             "",
             "Get a little closer to Python's pathlib module standards",
             "",
@@ -56,6 +58,6 @@
     "name": "mo-files",
     "packages": ["mo_files"],
     "url": "https://github.com/klahnakoski/mo-files",
-    "version": "6.687.25166",
+    "version": "6.688.25168",
     "zip_safe": false
 }
