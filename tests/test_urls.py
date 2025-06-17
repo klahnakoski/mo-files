@@ -186,3 +186,27 @@ class TestURLs(FuzzyTestCase):
     def test_no_change2(self):
         url = "env://EXAMPLE"
         self.assertEqual(str(URL(url)), url)
+
+    def test_set_scheme(self):
+        url = URL("https://tests/resources")
+        self.assertEqual(str(url.set_scheme("http")), "http://tests/resources")
+
+    def test_set_host(self):
+        url = URL("http://example.net/tests/resources")
+        self.assertEqual(str(url.set_host("example.com")), "http://example.com/tests/resources")
+
+    def test_set_port(self):
+        url = URL("http://example.net:8080/tests/resources")
+        self.assertEqual(str(url.set_port(9090)), "http://example.net:9090/tests/resources")
+
+    def test_set_path(self):
+        url = URL("file:///tests/resources")
+        self.assertEqual(str(url.set_path("other")), "file://other")
+
+    def test_set_query(self):
+        url = URL("file:///tests/resources")
+        self.assertEqual(str(url.set_query({"a": "b"})), "file:///tests/resources?a=b")
+
+    def test_set_fragment(self):
+        url = URL("file:///tests/resources")
+        self.assertEqual(str(url.set_fragment({"section1": 2})), "file:///tests/resources#section1=2")
