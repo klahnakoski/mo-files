@@ -27,6 +27,7 @@ from mo_files import mimetype
 from mo_files.url import URL
 
 windows_drive = re.compile(r"^/[a-zA-Z]:[/\\]")
+is_windows = os.sep == "\\"
 
 
 class File:
@@ -58,14 +59,15 @@ class File:
 
         if filename in (".", "/", ""):
             self._filename = filename or "."
-        elif os.sep == "\\" and windows_drive.match(filename):
+        elif is_windows and windows_drive.match(filename):
             self._filename = filename[1:]
         else:
             if filename.startswith("~"):
                 home_path = os.path.expanduser("~").replace(os.sep, "/").rstrip("/")
                 rel_path = filename[1::].replace(os.sep, "/").lstrip("/")
-                filename = home_path + "/" + rel_path
-            self._filename = filename.replace(os.sep, "/").rstrip("/")
+                self._filename = f"{home_path}/{rel_path}".rstrip("/")
+            else:
+                self._filename = filename.replace(os.sep, "/").rstrip("/")
 
         while self._filename.find(".../") >= 0:
             # LET ... REFER TO GRANDPARENT, .... REFER TO GREAT-GRAND-PARENT, etc...
@@ -95,28 +97,17 @@ class File:
 
     @property
     def abs_path(self):
-        if self._filename.startswith("~"):
-            home_path = os.path.expanduser("~")
-            if os.sep == "\\":
-                home_path = home_path.replace(os.sep, "/")
-            if home_path.endswith("/"):
-                home_path = home_path[:-1]
-
-            return home_path + self._filename[1::]
+        if is_windows:
+            return "/" + os.path.abspath(self._filename).replace(os.sep, "/")
         else:
-            if os.sep == "\\":
-                return "/" + os.path.abspath(self._filename).replace(os.sep, "/")
-            else:
-                return os.path.abspath(self._filename)
+            return os.path.abspath(self._filename)
 
     @property
     def os_path(self):
         """
         :return: OS-specific path
         """
-        if os.sep == "/":
-            return self.abs_path
-        return str(self.abs_path).lstrip("/")
+        return os.path.abspath(self._filename)
 
     def add_suffix(self, suffix):
         """
@@ -344,7 +335,7 @@ class File:
                         yield line.decode("utf8").rstrip()
             except Exception as e:
                 logger.error(
-                    "Can not read line from {{filename}}", filename=self._filename, cause=e,
+                    "Can not read line from {filename}", filename=self._filename, cause=e,
                 )
 
         return output()
@@ -416,7 +407,7 @@ class File:
             pass
         except Exception as e:
             logger.error(
-                "Could not make directory {{dir_name}}", dir_name=self._filename, cause=e,
+                "Could not make directory {dir_name}", dir_name=self._filename, cause=e,
             )
 
     @property
@@ -547,7 +538,7 @@ def datetime2string(value, format="%Y-%m-%d %H:%M:%S"):
         return value.strftime(format)
     except Exception as e:
         logger.error(
-            "Can not format {{value}} with {{format}}", value=value, format=format, cause=e,
+            "Can not format {value} with {format}", value=value, format=format, cause=e,
         )
 
 
@@ -568,7 +559,7 @@ def join_path(*path):
         if path[0][0] == "/":
             abs_prefix = "/"
             path[0] = path[0][1:]
-        elif os.sep == "\\" and path[0][1:].startswith(":/"):
+        elif is_windows and windows_drive.match(path[0]):
             # If windows, then look for the "c:/" prefix
             abs_prefix = path[0][0:3]
             path[0] = path[0][3:]
