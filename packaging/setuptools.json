@@ -11,7 +11,9 @@
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
-        "Programming Language :: Python :: 3.13"
+        "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
+        "Programming Language :: Python :: 3.15"
     ],
     "description": "More Files! Steamlined for UTF8 and JSON.",
     "extras_require": {"tests": ["mo-testing>=8.685.25166"]},
@@ -58,6 +60,6 @@
     "name": "mo-files",
     "packages": ["mo_files"],
     "url": "https://github.com/klahnakoski/mo-files",
-    "version": "6.690.25168",
+    "version": "6.698.25331",
     "zip_safe": false
 }
