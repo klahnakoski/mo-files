@@ -361,7 +361,7 @@ def from_paths(value):
                     d[p] = []
             elif is_text(q) == is_list(d[p]):
                 Log.error(
-                    "can not index {{type}} with {{key}}", type=type(d[p]).__name__, key=q,
+                    "can not index {type} with {key}", type=type(d[p]).__name__, key=q,
                 )
 
             d = d[p]

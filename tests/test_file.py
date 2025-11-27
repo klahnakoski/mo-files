@@ -1,12 +1,11 @@
 import os
-from datetime import time
-from unittest import TestCase
+from unittest import skipIf
 
 from mo_dots import Data, Null
 from mo_testing import FuzzyTestCase
 from mo_times import Date
 
-from mo_files import File
+from mo_files import File, is_windows
 
 
 class TestFile(FuzzyTestCase):
@@ -205,3 +204,18 @@ class TestFile(FuzzyTestCase):
         self.assertFalse(non_existent_file.exists)
         self.assertFalse(non_existent_file)
         self.assertFalse(bool(non_existent_file))
+
+    @skipIf(is_windows, "This test is only for Windows")
+    def test_os_path_on_windows(self):
+        file = File("tests/resources/test-file.txt")
+        self.assertTrue(file.os_path.endswith("tests\\resources\\test-file.txt"))
+        self.assertTrue(file.os_path.startswith("C:\\"))
+
+    @skipIf(is_windows, "This test is only for Windows")
+    def test_home_dir(self):
+        file = File("~")
+        self.assertTrue(file.os_path.startswith("C:\\"))
+
+    def test_home_dir(self):
+        file = File("~")
+        self.assertTrue(file.abs_path.startswith("/"))
