@@ -619,10 +619,14 @@ def add_suffix(filename, suffix):
     """
     ADD .suffix TO THE filename (NOT INCLUDING THE FILE EXTENSION)
     """
+    suffix = str(suffix).strip(".")
     path = filename.split("/")
     parts = path[-1].split(".")
-    i = max(len(parts) - 2, 0)
-    parts[i] = parts[i] + "." + str(suffix).strip(".")
+    if len(parts) == 1 or len(parts) == 2 and not parts[0]:
+        # HANDLE CASE OF HIDDEN FILES WITH NO EXTENSION (e.g. .gitignore)
+        parts.append(suffix)
+    else:
+        parts.insert(-1, suffix)
     path[-1] = ".".join(parts)
     return File("/".join(path))
 

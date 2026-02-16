@@ -123,6 +123,24 @@ class TestNames(FuzzyTestCase):
         self.assertEqual(test3.rel_path, "tools/test.-backup.json")
         self.assertEqual(test4.rel_path, "tools/other.json")
 
+    def test_suffix_no_extension(self):
+        test1 = File("tools/test")
+        test2 = test1.add_suffix(".backup")
+        test3 = test1.add_suffix("-backup")
+
+        self.assertEqual(test1.rel_path, "tools/test")
+        self.assertEqual(test2.rel_path, "tools/test.backup")
+        self.assertEqual(test3.rel_path, "tools/test.-backup")
+
+    def test_suffix_hidden_file(self):
+        test1 = File("tools/.test")
+        test2 = test1.add_suffix(".backup")
+        test3 = test1.add_suffix("-backup")
+
+        self.assertEqual(test1.rel_path, "tools/.test")
+        self.assertEqual(test2.rel_path, "tools/.test.backup")
+        self.assertEqual(test3.rel_path, "tools/.test.-backup")
+
     def test_file_file(self):
         test1 = File(File("test"))
         self.assertEqual(test1.rel_path, "test")
