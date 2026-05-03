@@ -8,23 +8,24 @@
 # Contact: Kyle Lahnakoski (kyle@lahnakoski.com)
 #
 import base64
-import secrets
 import io
 import os
 import re
+import secrets
 import shutil
+import datetime as datetime_module
 from datetime import datetime
 from mimetypes import MimeTypes
 from tempfile import NamedTemporaryFile, mkdtemp
 
-from mo_dots import Null, coalesce, get_module, is_list, to_data, is_sequence, is_data, is_missing, from_data
+from mo_dots import Null, coalesce, is_list, to_data, is_sequence, is_data, is_missing, from_data
 from mo_future import text, is_text, ConfigParser, StringIO
 from mo_json import json2value
 from mo_logs import Except, logger
 from mo_logs.exceptions import get_stacktrace
+
 from mo_files import mimetype
 from mo_files.url import URL
-
 
 URLSAFE_B64_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_"
 windows_drive = re.compile(r"^/[a-zA-Z]:[/\\]")
@@ -204,7 +205,7 @@ class File:
         """
         RETURN A FILENAME THAT CAN SERVE AS A BACKUP FOR THIS FILE
         """
-        suffix = datetime2string(coalesce(timestamp, datetime.utcnow()), "%Y%m%d_%H%M%S")
+        suffix = datetime2string(coalesce(timestamp, datetime.now(datetime_module.timezone.utc)), "%Y%m%d_%H%M%S")
         return add_suffix(self._filename, suffix)
 
     def read(self, encoding="utf8") -> str:
@@ -377,7 +378,7 @@ class File:
     def backup(self, format=" %Y%m%d %H%M%S"):
         path = self._filename.split("/")
         names = path[-1].split(".")
-        backup_name = f"backup{datetime.utcnow(datetime.timezone.utc).strftime(format)}"
+        backup_name = f"backup{datetime.now(datetime_module.timezone.utc).strftime(format)}"
         if len(names) == 1 or names[0] == "":
             names.append(backup_name)
         else:
@@ -440,7 +441,6 @@ class File:
 
     size = length
 
-
     @classmethod
     def copy(cls, from_, to_):
         _copy(File(from_), File(to_))
@@ -493,8 +493,7 @@ class TempFile(File):
             return
         # Use a 20-character URL-safe base64 prefix for the temp filename (inline)
         self.temp = NamedTemporaryFile(
-            prefix="".join(secrets.choice(URLSAFE_B64_ALPHABET) for _ in range(20)),
-            delete=False,
+            prefix="".join(secrets.choice(URLSAFE_B64_ALPHABET) for _ in range(20)), delete=False,
         )
         self.temp.close()
         File.__init__(self, self.temp.name)
