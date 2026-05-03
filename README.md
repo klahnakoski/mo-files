@@ -12,6 +12,10 @@ The `File` class makes the default assumption all files have cr-delimited unicod
 
 ## Breaking changes
 
+### Version 7.x
+
+Removed crypto module dependency. This was only used for the `encrypt` and `decrypt` methods, which have been removed. If you need to encrypt files, consider using a separate library such as `cryptography` or `pycryptodome`.
+
 ### Version 6.x
 
 **December 2022**
