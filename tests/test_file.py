@@ -205,17 +205,18 @@ class TestFile(FuzzyTestCase):
         self.assertFalse(non_existent_file)
         self.assertFalse(bool(non_existent_file))
 
-    @skipIf(is_windows, "This test is only for Windows")
+    @skipIf(not is_windows, "This test is only for Windows")
     def test_os_path_on_windows(self):
         file = File("tests/resources/test-file.txt")
         self.assertTrue(file.os_path.endswith("tests\\resources\\test-file.txt"))
         self.assertTrue(file.os_path.startswith("C:\\"))
 
-    @skipIf(is_windows, "This test is only for Windows")
-    def test_home_dir(self):
+    @skipIf(not is_windows, "This test is only for Windows")
+    def test_home_dir_windows(self):
         file = File("~")
         self.assertTrue(file.os_path.startswith("C:\\"))
 
-    def test_home_dir(self):
+    @skipIf(is_windows, "This test is only for non-Windows")
+    def test_home_dir_unix(self):
         file = File("~")
         self.assertTrue(file.abs_path.startswith("/"))
