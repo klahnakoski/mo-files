@@ -20,7 +20,7 @@
     "include_package_data": true,
     "install_requires": [
          "mo-dots==10.685.25166", "mo-future==7.685.25166",   "mo-json==6.703.26061",
-          "mo-logs==8.703.26061",   "mo-math==7.685.25166"
+          "mo-logs==8.703.26061"
     ],
     "license": "MPL 2.0",
     "long_description": {
@@ -38,6 +38,10 @@
             "",
             "",
             "## Breaking changes",
+            "",
+            "### Version 7.x",
+            "",
+            "Removed crypto module dependency. This was only used for the `encrypt` and `decrypt` methods, which have been removed. If you need to encrypt files, consider using a separate library such as `cryptography` or `pycryptodome`.",
             "",
             "### Version 6.x",
             "",
@@ -60,6 +64,6 @@
     "name": "mo-files",
     "packages": ["mo_files"],
     "url": "https://github.com/klahnakoski/mo-files",
-    "version": "7.0.0",
+    "version": "7.709.26123",
     "zip_safe": false
 }
